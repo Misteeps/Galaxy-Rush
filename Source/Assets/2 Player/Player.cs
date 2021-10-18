@@ -181,8 +181,8 @@ namespace Game
 		public float Run()
 		{
 			float input = 0;
-			if (Input.speedUp.Held) input += 0.25f;
-			if (Input.slowDown.Held) input -= 0.25f;
+			if (Input.speedUp.Held) input += 0.5f;
+			if (Input.slowDown.Held) input -= 0.5f;
 
 			float speed = movement.runSpeed * (movement.speedModifier + input) * Time.timeScale;
 			if (controller.velocity.z < speed - 0.1f || controller.velocity.z > speed + 0.1f)
