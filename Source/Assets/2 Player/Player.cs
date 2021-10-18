@@ -9,8 +9,8 @@ namespace Game
 {
 	public class Player : MonoBehaviour
 	{
-        #region Head
-        [Serializable]
+		#region Head
+		[Serializable]
 		public class Head
 		{
 			public float lookSensitivity = 1f; // Move to settings
@@ -20,15 +20,16 @@ namespace Game
 			public float yaw;
 			public float pitch;
 		}
-        #endregion Head
-        #region Movement
-        [Serializable]
+		#endregion Head
+		#region Movement
+		[Serializable]
 		public class Movement
 		{
 			public float runSpeed = 24;
 			public float dashSpeed = 100;
 			public float speedModifier = 1;
 			public float acceleration = 8;
+			public float armSpeed = 2;
 
 			[Space(4)]
 			public float strafeTime = 0.25f;
@@ -106,13 +107,9 @@ namespace Game
 				slowTime = Animator.StringToHash("Slow Time");
 			}
 
-			public void Animate(int id) => Debug.Log("Arm Anim Trigger");
-			public void Animate(int id, bool value) => Debug.Log("Arm Anim Bool");
-			public void Animate(int id, float value) => Debug.Log("Arm Anim Float");
-
-			//public void Animate(int id) => animator.SetTrigger(id);
-			//public void Animate(int id, bool value) => animator.SetBool(id, value);
-			//public void Animate(int id, float value) => animator.SetFloat(id, value);
+			public void Animate(int id) => animator.SetTrigger(id);
+			public void Animate(int id, bool value) => animator.SetBool(id, value);
+			public void Animate(int id, float value) => animator.SetFloat(id, value);
 		}
 		#endregion Arm
 
@@ -127,7 +124,16 @@ namespace Game
 		public Arm leftArm;
 
 
-        public void Update()
+		public void Start()
+		{
+			Arm.SetIDs();
+
+			movement.armSwing = 2;
+			powers.shots = powers.maxShots;
+			powers.slowTime = powers.maxSlowTime;
+		}
+
+		public void Update()
 		{
 			movement.dashCooldown += Time.deltaTime;
 			movement.strafeCooldown += Time.deltaTime;
@@ -140,11 +146,18 @@ namespace Game
 
 
 			Aim();
+			if (Input.shoot.Down) rightArm.Animate(Arm.shoot);
+
+
+			movement.armSwing += movement.armSpeed * Time.unscaledDeltaTime;
+			if (movement.armSwing >= 1) movement.armSwing -= 1;
+			rightArm.Animate(Arm.run, movement.armSwing);
+			leftArm.Animate(Arm.run, movement.armSwing - 0.5f);
 		}
-        public void LateUpdate()
-        {
+		public void LateUpdate()
+		{
 			TurnHead();
-        }
+		}
 
 
 		public void Strafe()
@@ -166,7 +179,7 @@ namespace Game
 			movement.grounded = Physics.CheckSphere(spherePosition, movement.groundedHitboxRadius, movement.groundedHitboxLayers, QueryTriggerInteraction.Ignore);
 		}
 		public float Run()
-        {
+		{
 			float input = 0;
 			if (Input.speedUp.Held) input += 0.25f;
 			if (Input.slowDown.Held) input -= 0.25f;
@@ -229,7 +242,7 @@ namespace Game
 		}
 
 		public void TurnHead()
-        {
+		{
 			Vector2 turn = Input.mouseDelta;
 			head.yaw = SoftTurn(head.yaw, turn.x * head.lookSensitivity, 75);
 			head.pitch = SoftTurn(head.pitch, turn.y * -head.lookSensitivity, 89.9f);
@@ -259,9 +272,9 @@ namespace Game
 
 
 		public void Aim()
-        {
+		{
 			if (Input.aim.Held && powers.slowTime > 0)
-            {
+			{
 				powers.slowTime -= Time.unscaledDeltaTime;
 				Time.timeScale = 0.2f;
 				rightArm.Animate(Arm.aim, true);
