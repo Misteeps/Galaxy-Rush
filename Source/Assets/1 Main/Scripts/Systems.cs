@@ -21,15 +21,6 @@ namespace Game
         {
             Transition.IncrementObjects(Time.deltaTime);
             Transition.IncrementTweens(Time.deltaTime);
-
-            if (Input.shoot.Down)
-                Debug.Log("Shot");
-
-            if (Input.aim.Held)
-                Debug.Log("Aiming");
-
-            if (Input.jump.Down)
-                Debug.Log("Jump");
         }
     }
 
