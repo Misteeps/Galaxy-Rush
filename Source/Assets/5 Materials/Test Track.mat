@@ -77,12 +77,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - Ambient_Occlusion: 2
     - Border: 0.45
     - Lanes: 5
     - Lines_Count: 50
     - Lines_Length: 0.2
     - Lines_Width: 0
+    - Metallic: 0
     - RGBSpeed: 0.15
+    - Smoothness: 0.7
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
