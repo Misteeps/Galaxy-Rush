@@ -81,8 +81,8 @@ namespace Game
 			public static float runTimer;
 
 			public static int run;
-			public static int strafeLeft;
-			public static int strafeRight;
+			public static int strafeIn;
+			public static int strafeOut;
 
 			public static int dash;
 			public static int jump;
@@ -95,8 +95,8 @@ namespace Game
 			public static void SetIDs()
 			{
 				run = Animator.StringToHash("Run");
-				strafeLeft = Animator.StringToHash("Strafe Left");
-				strafeRight = Animator.StringToHash("Strafe Right");
+				strafeIn = Animator.StringToHash("Strafe In");
+				strafeOut = Animator.StringToHash("Strafe Out");
 
 				dash = Animator.StringToHash("Dash");
 				jump = Animator.StringToHash("Jump");
