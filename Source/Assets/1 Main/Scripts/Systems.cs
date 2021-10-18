@@ -11,9 +11,14 @@ namespace Game
 {
     public class Systems : MonoBehaviour
     {
+        public enum State { Menu, Paused, Results, Death, Level1, Level2, Level3, Level4, Level5 }
+        public State state;
+
         public void Awake()
         {
+            Settings.Initialize();
             Input.Initialize();
+
             Transition.Initialize();
         }
 
@@ -25,6 +30,15 @@ namespace Game
     }
 
     #region Settings
+    public static class Settings
+    {
+        public static int fov;
+
+        public static void Initialize()
+        {
+            fov = 80;
+        }
+    }
     #endregion Settings
     #region Input
     public static class Input
@@ -125,6 +139,9 @@ namespace Game
         }
     }
     #endregion Input
+
+    #region UI
+    #endregion UI
 
     #region Transition
     public enum TransitionComponents { Position, Rotation, Scale, UIColor, UIAlpha }
