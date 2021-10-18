@@ -531,11 +531,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4a5893a54718d4d978f910d244265a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 0}
-  cameraPosition: {fileID: 0}
+  controller: {fileID: 1265007624}
+  cameraPosition: {fileID: 19480626}
   head:
     lookSensitivity: 1
     softClamp: 25
+    yaw: 0
+    pitch: 0
   movement:
     runSpeed: 24
     dashSpeed: 100
@@ -551,7 +553,7 @@ MonoBehaviour:
     groundedHitboxRadius: 0.5
     groundedHitboxLayers:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 32768
     speed: 0
     verticalVelocity: 0
     lane: 0
@@ -560,10 +562,10 @@ MonoBehaviour:
     dashCooldown: 0
     doubleJump: 0
     armSwing: 0
-  leftArm:
+  rightArm:
     animator: {fileID: 0}
     mesh: {fileID: 0}
-  rightArm:
+  leftArm:
     animator: {fileID: 0}
     mesh: {fileID: 0}
 --- !u!1 &1449331698
@@ -853,7 +855,7 @@ GameObject:
   - component: {fileID: 1623261222}
   - component: {fileID: 1623261221}
   - component: {fileID: 1623261220}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -932,11 +934,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623261219}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 20}
+  m_LocalPosition: {x: 0, y: 0, z: 500}
+  m_LocalScale: {x: 2, y: 1, z: 110}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1696617438
 GameObject:
@@ -1034,7 +1036,7 @@ GameObject:
   - component: {fileID: 1856240912}
   - component: {fileID: 1856240911}
   - component: {fileID: 1856240910}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1116,7 +1118,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -10, z: 0}
 --- !u!1 &1981320048
 GameObject:

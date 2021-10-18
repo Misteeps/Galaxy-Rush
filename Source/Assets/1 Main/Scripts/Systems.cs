@@ -19,6 +19,9 @@ namespace Game
 
         public void Update()
         {
+            Transition.IncrementObjects(Time.deltaTime);
+            Transition.IncrementTweens(Time.deltaTime);
+
             if (Input.shoot.Down)
                 Debug.Log("Shot");
 
