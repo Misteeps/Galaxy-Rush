@@ -11,19 +11,19 @@ TagManager:
   - 
   - Water
   - UI
+  - Player
+  - Projectile
   - 
   - 
+  - Target
+  - Destructable
   - 
   - 
+  - Wall
+  - Floor
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Death
   - 
   - 
   - 
