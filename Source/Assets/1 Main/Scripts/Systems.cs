@@ -100,14 +100,20 @@ namespace Game
         public static void CursorSize(float value)
         {
             cursorSize = value;
+
+            Global.menu?.cursor.SetSize(value);
         }
         public static void CursorColor(Color value)
         {
             cursorColor = value;
+
+            Global.menu?.cursor.SetColor(value, 0);
         }
         public static void CursorFocusedColor(Color value)
         {
             cursorFocusedColor = value;
+
+            Global.menu?.cursor.SetColor(value, 0);
         }
 
         public static void Fov(float value)
@@ -262,6 +268,7 @@ namespace Game
     #region UI
     public static class UI
     {
+        #region Group
         [Serializable]
         public abstract class Group
         {
@@ -285,7 +292,7 @@ namespace Game
                 EnableHitboxes(group, false);
             }
         }
-
+        #endregion Group
         #region Cursor
         [Serializable]
         public class Cursor : Group
@@ -314,9 +321,41 @@ namespace Game
             public void Focus(bool focused)
             {
                 if (focused)
-                    dot.color = new Color(0, 1, 1, 1);
+                {
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 2f, 2.4f, 0.2f);
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 2f, 2.4f, 0.2f);
+
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0f, 0.25f, 0.15f);
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0f, 0.25f, 0.15f);
+
+                    SetColor(Settings.cursorFocusedColor, 0.1f);
+                }
                 else
-                    dot.color = new Color(1, 1, 1, 1);
+                {
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 2.4f, 2f, 0.2f);
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 2.4f, 2f, 0.2f);
+
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0.25f, 0f, 0.15f);
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0.25f, 0f, 0.15f);
+
+                    SetColor(Settings.cursorColor, 0.1f);
+                }
+            }
+
+            public void SetSize(float size) => group.transform.localScale = new Vector3(size, size, 1);
+            public void SetColor(Color? color = null, float speed = 0)
+            {
+                if (color == null) color = (hovered == null) ? Settings.cursorColor : Settings.cursorFocusedColor;
+
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.r, speed);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.g, speed);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.b, speed);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.a, speed);
+
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.r, speed);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.g, speed);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.b, speed);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.a, speed);
             }
 
             public void GetHovered()
