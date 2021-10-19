@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Game
+namespace GalaxyRush
 {
 	public class Player : MonoBehaviour
 	{

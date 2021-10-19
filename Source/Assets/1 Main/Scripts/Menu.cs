@@ -6,26 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Game
+namespace GalaxyRush
 {
     public class Menu : MonoBehaviour
     {
-        public void Start()
-        {
-            Global.Initialize();
-            Settings.Initialize();
-            Input.Initialize();
-            Transition.Initialize();
-
-            Global.menu = this;
-            Time.timeScale = 1;
-
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
-
-            Initialize();
-        }
-
-
         private const float sideMenuYStart = -405;
         private const float sideMenuYEnd = -385;
 
@@ -33,6 +17,8 @@ namespace Game
         [Serializable]
         public class Foreground : UI.Group
         {
+            public int targetLevel;
+
             public override void Initialize()
             {
                 group.alpha = 1;
@@ -42,7 +28,18 @@ namespace Game
             }
             public override void Update()
             {
+                if (targetLevel == 0) return;
 
+                if (group.alpha >= 1)
+                    Global.loader.Load($"Level {targetLevel}");
+
+                if (Input.escape.Down)
+                {
+                    Global.menu.main.Show();
+
+                    targetLevel = 0;
+                    Hide();
+                }
             }
         }
         #endregion Foreground
@@ -599,6 +596,23 @@ namespace Game
 
         public bool settingsLocked;
 
+        public void Start()
+        {
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1;
+
+            Global.menu = this;
+            Global.game = null;
+            Global.loader = GameObject.FindWithTag("Scene Loader").GetComponent<SceneLoader>();
+            Global.loader.gameObject.SetActive(false);
+
+            Global.Initialize();
+            Transition.Initialize();
+            Settings.Initialize();
+            Input.Initialize();
+
+            Initialize();
+        }
         public void Initialize()
         {
             cursor.Initialize();
@@ -622,6 +636,7 @@ namespace Game
                 return;
             }
 
+            foreground.Update();
             main.Update();
             chapters.Update();
             settings.Update();
@@ -629,7 +644,14 @@ namespace Game
 
             if (Input.click.Down && cursor.hovered != null)
             {
-                if (cursor.hovered == main.play) Debug.Log("Play");
+                if (cursor.hovered == main.play)
+                {
+                    CloseSideMenus();
+                    main.Hide(0.5f);
+
+                    foreground.targetLevel = 1;
+                    foreground.Show(0.5f);
+                }
                 else if (cursor.hovered == main.chapters) { CloseSideMenus(); chapters.Show(); }
                 else if (cursor.hovered == main.settings) { CloseSideMenus(); settings.Show(); }
                 else if (cursor.hovered == main.credits) { CloseSideMenus(); credits.Show(); }

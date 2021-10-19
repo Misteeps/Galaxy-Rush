@@ -7,22 +7,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Game
+namespace GalaxyRush
 {
-    public enum GameStates { Menu, Paused, Results, Death, Level1, Level2, Level3, Level4, Level5 }
-
     #region Global
     public static class Global
     {
         private static bool initialized;
 
-        public static Menu menu;
-
-        public static GameStates state;
         public static Dictionary<int, int> scores;
 
-        public static float time;
-        public static int totalShots;
+        public static Menu menu;
+        public static Game game;
+        public static SceneLoader loader;
 
 
         public static void Initialize()
@@ -30,7 +26,6 @@ namespace Game
             if (initialized) return;
             initialized = true;
 
-            state = GameStates.Menu;
             scores = new Dictionary<int, int>();
         }
     }
@@ -396,6 +391,7 @@ namespace Game
     #endregion UI
 
     #region Transition
+    // DO NOT INSERT COMPONENTS. APPEND ONLY.
     public enum TransitionComponents { Position, LocalPosition, Rotation, Scale, UIColor, UIAlpha }
     public enum TransitionUnits { X, Y, Z, W, R, G, B, A }
     public enum EaseFunctions { Linear, Quadratic, Cubic, Quartic, Quintic, Sine, Circular, Exponential, Elastic, Back, Bounce }
