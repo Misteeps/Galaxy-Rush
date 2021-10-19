@@ -1011,7 +1011,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "16c3efd44a974abdaf9803b70954f650",
     "m_Id": 0,
-    "m_DisplayName": "RGBSpeed",
+    "m_DisplayName": "RGB",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -3630,10 +3630,10 @@
     "m_Guid": {
         "m_GuidSerialized": "218758e0-c152-41aa-a780-3294b9867cb8"
     },
-    "m_Name": "RGBSpeed",
+    "m_Name": "RGB",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "RGBSpeed",
-    "m_DefaultReferenceName": "RGBSpeed",
+    "m_RefNameGeneratedByDisplayName": "RGB",
+    "m_DefaultReferenceName": "RGB",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,

@@ -16,6 +16,8 @@ namespace Game
     {
         private static bool initialized;
 
+        public static Menu menu;
+
         public static GameStates state;
         public static Dictionary<int, int> scores;
 
@@ -42,7 +44,22 @@ namespace Game
         public static float cursorSensitivity;
         public static float lookSensitivity;
 
-        public static int fov;
+        public static float cursorSize;
+        public static Color cursorColor;
+        public static Color cursorFocusedColor;
+
+        public static float fov;
+
+        public static float brightness;
+        public static float contrast;
+        public static float gamma;
+        public static float saturation;
+        public static float hueShift;
+        public static float bloom;
+        public static float chromaticAberration;
+
+        public static float sfxVolume;
+        public static float musicVolume;
 
 
         public static void Initialize()
@@ -50,10 +67,90 @@ namespace Game
             if (initialized) return;
             initialized = true;
 
-            cursorSensitivity = 2;
-            lookSensitivity = 2;
+            CursorSensitivity(2);
+            LookSensitivity(1);
 
-            fov = 80;
+            CursorSize(10);
+            CursorColor(new Color(1, 1, 1));
+            CursorFocusedColor(new Color(1, 1, 1));
+
+            Fov(80);
+
+            Brightness(1);
+            Contrast(0);
+            Gamma(1);
+            Saturation(0);
+            HueShift(0);
+            Bloom(5);
+            ChromaticAberration(0);
+
+            SFXVolume(40);
+            MusicVolume(40);
+        }
+
+        public static void CursorSensitivity(float value)
+        {
+            cursorSensitivity = value;
+        }
+        public static void LookSensitivity(float value)
+        {
+            lookSensitivity = value;
+        }
+
+        public static void CursorSize(float value)
+        {
+            cursorSize = value;
+        }
+        public static void CursorColor(Color value)
+        {
+            cursorColor = value;
+        }
+        public static void CursorFocusedColor(Color value)
+        {
+            cursorFocusedColor = value;
+        }
+
+        public static void Fov(float value)
+        {
+            fov = value;
+        }
+
+        public static void Brightness(float value)
+        {
+            brightness = value;
+        }
+        public static void Contrast(float value)
+        {
+            contrast = value;
+        }
+        public static void Gamma(float value)
+        {
+            gamma = value;
+        }
+        public static void Saturation(float value)
+        {
+            saturation = value;
+        }
+        public static void HueShift(float value)
+        {
+            hueShift = value;
+        }
+        public static void Bloom(float value)
+        {
+            bloom = value;
+        }
+        public static void ChromaticAberration(float value)
+        {
+            chromaticAberration = value;
+        }
+
+        public static void SFXVolume(float value)
+        {
+            sfxVolume = value;
+        }
+        public static void MusicVolume(float value)
+        {
+            musicVolume = value;
         }
     }
     #endregion Settings
@@ -85,6 +182,7 @@ namespace Game
         //public static Vector2 cursor => Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
         //public static Vector2 cursor => Camera.main.ScreenToViewportPoint(UnityEngine.Input.mousePosition);
         public static Vector2 mouseDelta => new Vector2(UnityEngine.Input.GetAxis("X"), UnityEngine.Input.GetAxis("Y"));
+        public static float scroll => UnityEngine.Input.GetAxis("Scroll");
 
         public static Trigger click;
         public static Trigger escape;
@@ -145,17 +243,17 @@ namespace Game
                 case KeyCode.Alpha7: return "7";
                 case KeyCode.Alpha8: return "8";
                 case KeyCode.Alpha9: return "9";
-                case KeyCode.BackQuote: return "`";
-                case KeyCode.Minus: return "-";
-                case KeyCode.Equals: return "=";
-                case KeyCode.LeftBracket: return "[";
-                case KeyCode.RightBracket: return "]";
-                case KeyCode.Backslash: return "\\";
-                case KeyCode.Semicolon: return ";";
-                case KeyCode.Quote: return "'";
-                case KeyCode.Comma: return ",";
-                case KeyCode.Period: return ".";
-                case KeyCode.Slash: return "/";
+                //case KeyCode.BackQuote: return "`";
+                //case KeyCode.Minus: return "-";
+                //case KeyCode.Equals: return "=";
+                //case KeyCode.LeftBracket: return "[";
+                //case KeyCode.RightBracket: return "]";
+                //case KeyCode.Backslash: return "\\";
+                //case KeyCode.Semicolon: return ";";
+                //case KeyCode.Quote: return "'";
+                //case KeyCode.Comma: return ",";
+                //case KeyCode.Period: return ".";
+                //case KeyCode.Slash: return "/";
             }
         }
     }
@@ -174,7 +272,7 @@ namespace Game
                 group.alpha = 0;
                 EnableHitboxes(group, false);
             }
-            public abstract void Update(GameObject hovered = null);
+            public abstract void Update();
 
             public virtual void Show(float speed = 0.25f)
             {
@@ -204,7 +302,7 @@ namespace Game
                 group.alpha = 1;
                 EnableHitboxes(group, false);
             }
-            public override void Update(GameObject hovered = null) { }
+            public override void Update() { }
 
             public void Move(Vector2 delta, Vector2 bounds)
             {
@@ -213,9 +311,9 @@ namespace Game
 
                 group.transform.localPosition = new Vector3(x, y, 0);
             }
-            public void Active(bool active)
+            public void Focus(bool focused)
             {
-                if (active)
+                if (focused)
                     dot.color = new Color(0, 1, 1, 1);
                 else
                     dot.color = new Color(1, 1, 1, 1);
@@ -227,7 +325,7 @@ namespace Game
                 if (hit.collider?.gameObject == this.hovered) return;
 
                 this.hovered = hit.collider?.gameObject;
-                Active(this.hovered != null);
+                Focus(this.hovered != null);
             }
             public void GetTargeted()
             {
@@ -502,7 +600,15 @@ namespace Game
             public void SetScale(float scale) => SetScale(new Vector3(scale, scale, scale));
             public void SetScale(Vector3 scale) => transform.localScale = scale;
 
-            public void SetUIColor(float? r = null, float? g = null, float? b = null, float? a = null) => SetUIColor(new Color(r.Value, g.Value, b.Value, a.Value));
+            public void SetUIColor(float? r = null, float? g = null, float? b = null, float? a = null)
+            {
+                if (r == null) r = image.color.r;
+                if (g == null) g = image.color.g;
+                if (b == null) b = image.color.b;
+                if (a == null) a = image.color.a;
+
+                SetUIColor(new Color(r.Value, g.Value, b.Value, a.Value));
+            }
             public void SetUIColor(Color color) => image.color = color;
         }
         #endregion Object
