@@ -9,33 +9,50 @@ using UnityEngine.UI;
 
 namespace Game
 {
-    public class Systems : MonoBehaviour
+    public enum GameStates { Menu, Paused, Results, Death, Level1, Level2, Level3, Level4, Level5 }
+
+    #region Global
+    public static class Global
     {
-        public enum State { Menu, Paused, Results, Death, Level1, Level2, Level3, Level4, Level5 }
-        public State state;
+        private static bool initialized;
 
-        public void Awake()
+        public static GameStates state;
+        public static Dictionary<int, int> scores;
+
+        public static float time;
+        public static int totalShots;
+
+
+        public static void Initialize()
         {
-            Settings.Initialize();
-            Input.Initialize();
+            if (initialized) return;
+            initialized = true;
 
-            Transition.Initialize();
-        }
-
-        public void Update()
-        {
-            Transition.IncrementObjects(Time.deltaTime);
-            Transition.IncrementTweens(Time.deltaTime);
+            state = GameStates.Menu;
+            scores = new Dictionary<int, int>();
         }
     }
+    #endregion Global
 
     #region Settings
     public static class Settings
     {
+        private static bool initialized;
+
+        public static float cursorSensitivity;
+        public static float lookSensitivity;
+
         public static int fov;
+
 
         public static void Initialize()
         {
+            if (initialized) return;
+            initialized = true;
+
+            cursorSensitivity = 2;
+            lookSensitivity = 2;
+
             fov = 80;
         }
     }
@@ -63,8 +80,10 @@ namespace Game
         }
         #endregion Trigger
 
+        private static bool initialized;
 
-        public static Vector2 cursor => Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
+        //public static Vector2 cursor => Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
+        //public static Vector2 cursor => Camera.main.ScreenToViewportPoint(UnityEngine.Input.mousePosition);
         public static Vector2 mouseDelta => new Vector2(UnityEngine.Input.GetAxis("X"), UnityEngine.Input.GetAxis("Y"));
 
         public static Trigger click;
@@ -84,6 +103,9 @@ namespace Game
 
         public static void Initialize()
         {
+            if (initialized) return;
+            initialized = true;
+
             click = new Trigger(KeyCode.Mouse0, KeyCode.None);
             escape = new Trigger(KeyCode.Escape, KeyCode.Mouse3);
 
@@ -98,7 +120,6 @@ namespace Game
             dash = new Trigger(KeyCode.LeftShift, KeyCode.None);
             jump = new Trigger(KeyCode.Space, KeyCode.None);
         }
-
 
         public static string KeycodeString(KeyCode keycode)
         {
@@ -141,6 +162,100 @@ namespace Game
     #endregion Input
 
     #region UI
+    public static class UI
+    {
+        [Serializable]
+        public abstract class Group
+        {
+            public CanvasGroup group;
+
+            public virtual void Initialize()
+            {
+                group.alpha = 0;
+                EnableHitboxes(group, false);
+            }
+            public abstract void Update(GameObject hovered = null);
+
+            public virtual void Show(float speed = 0.25f)
+            {
+                Transition.Add(group.gameObject, TransitionComponents.UIAlpha, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, 1, speed);
+                EnableHitboxes(group, true);
+            }
+            public virtual void Hide(float speed = 0.1f)
+            {
+                Transition.Add(group.gameObject, TransitionComponents.UIAlpha, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 1, 0, speed);
+                EnableHitboxes(group, false);
+            }
+        }
+
+        #region Cursor
+        [Serializable]
+        public class Cursor : Group
+        {
+            public Image crosshair;
+            public Image dot;
+
+            public GameObject hovered;
+            public Vector3 targeted;
+
+
+            public override void Initialize()
+            {
+                group.alpha = 1;
+                EnableHitboxes(group, false);
+            }
+            public override void Update(GameObject hovered = null) { }
+
+            public void Move(Vector2 delta, Vector2 bounds)
+            {
+                float x = Mathf.Clamp(group.transform.position.x + delta.x * Settings.cursorSensitivity, 0, bounds.x);
+                float y = Mathf.Clamp(group.transform.position.y + delta.y * Settings.cursorSensitivity, 0, bounds.y);
+
+                group.transform.position = new Vector3(x, y, 0);
+            }
+            public void Active(bool active)
+            {
+                if (active)
+                    dot.color = new Color(0, 1, 1, 1);
+                else
+                    dot.color = new Color(1, 1, 1, 1);
+            }
+
+            public void GetHovered()
+            {
+                RaycastHit2D hit = Physics2D.Raycast(group.transform.position, Vector2.zero);
+                if (hit.collider?.gameObject == this.hovered) return;
+
+                this.hovered = hit.collider?.gameObject;
+                Active(this.hovered != null);
+            }
+            public void GetTargeted()
+            {
+
+            }
+        }
+        #endregion Cursor
+
+        public static void ColorObject(GameObject gameObject, float? r = null, float? g = null, float? b = null, float? a = null) => ColorObject(gameObject.GetComponent<Image>(), r.Value, g.Value, b.Value, a.Value);
+        public static void ColorObject(GameObject gameObject, Color color) => ColorObject(gameObject.GetComponent<Image>(), color);
+        public static void ColorObject(Image image, float? r = null, float? g = null, float? b = null, float? a = null)
+        {
+            if (r == null) r = image.color.r;
+            if (g == null) g = image.color.g;
+            if (b == null) b = image.color.b;
+            if (a == null) a = image.color.a;
+
+            ColorObject(image, new Color(r.Value, g.Value, b.Value, a.Value));
+        }
+        public static void ColorObject(Image image, Color color) => image.color = color;
+
+        public static void EnableHitboxes(CanvasGroup group, bool enabled) => EnableHitboxes(group.gameObject, enabled);
+        public static void EnableHitboxes(GameObject gameObject, bool enabled)
+        {
+            foreach (Collider2D collider in gameObject.GetComponentsInChildren<Collider2D>())
+                collider.enabled = enabled;
+        }
+    }
     #endregion UI
 
     #region Transition

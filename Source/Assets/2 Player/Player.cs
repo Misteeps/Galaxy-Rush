@@ -13,7 +13,6 @@ namespace Game
 		[Serializable]
 		public class Head
 		{
-			public float lookSensitivity = 1f; // Move to settings
 			public float softClamp = 25f;
 
 			[Header("Readonly")]
@@ -244,8 +243,8 @@ namespace Game
 		public void TurnHead()
 		{
 			Vector2 turn = Input.mouseDelta;
-			head.yaw = SoftTurn(head.yaw, turn.x * head.lookSensitivity, 75);
-			head.pitch = SoftTurn(head.pitch, turn.y * -head.lookSensitivity, 89.9f);
+			head.yaw = SoftTurn(head.yaw, turn.x * Settings.lookSensitivity, 75);
+			head.pitch = SoftTurn(head.pitch, turn.y * -Settings.lookSensitivity, 89.9f);
 
 			cameraPosition.transform.localRotation = Quaternion.Euler(head.pitch, head.yaw, 0);
 		}
