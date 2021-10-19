@@ -22,6 +22,7 @@ namespace GalaxyRush
         public static Game game;
         public static SceneLoader loader;
         public static Camera camera;
+        public static Player player;
 
 
         public static void Initialize()
@@ -130,18 +131,21 @@ namespace GalaxyRush
             cursorSize = value;
 
             Global.menu?.cursor.SetSize(value);
+            Global.game?.cursor.SetSize(value);
         }
         public static void CursorColor(Color value)
         {
             cursorColor = value;
 
             Global.menu?.cursor.SetColor(value, 0);
+            Global.game?.cursor.SetColor(value, 0);
         }
         public static void CursorFocusedColor(Color value)
         {
             cursorFocusedColor = value;
 
             Global.menu?.cursor.SetColor(value, 0);
+            Global.game?.cursor.SetColor(value, 0);
         }
 
         public static void Fov(float value)
@@ -334,95 +338,16 @@ namespace GalaxyRush
 
             public virtual void Show(float speed = 0.25f)
             {
-                Transition.Add(group.gameObject, TransitionComponents.UIAlpha, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, 1, speed);
+                Transition.Add(group.gameObject, TransitionComponents.UIAlpha, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, 1, speed, true);
                 EnableHitboxes(group, true);
             }
             public virtual void Hide(float speed = 0.1f)
             {
-                Transition.Add(group.gameObject, TransitionComponents.UIAlpha, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 1, 0, speed);
+                Transition.Add(group.gameObject, TransitionComponents.UIAlpha, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 1, 0, speed, true);
                 EnableHitboxes(group, false);
             }
         }
         #endregion Group
-        #region Cursor
-        [Serializable]
-        public class Cursor : Group
-        {
-            public Image crosshair;
-            public Image dot;
-
-            public GameObject hovered;
-            public Vector3 targeted;
-
-
-            public override void Initialize()
-            {
-                group.alpha = 1;
-                EnableHitboxes(group, false);
-            }
-            public override void Update() { }
-
-            public void Move(Vector2 delta, Vector2 bounds)
-            {
-                float x = Mathf.Clamp(group.transform.localPosition.x + (delta.x * Settings.cursorSensitivity), -bounds.x, bounds.x);
-                float y = Mathf.Clamp(group.transform.localPosition.y + (delta.y * Settings.cursorSensitivity), -bounds.y, bounds.y);
-
-                group.transform.localPosition = new Vector3(x, y, 0);
-            }
-            public void Focus(bool focused)
-            {
-                if (focused)
-                {
-                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 2f, 2.4f, 0.2f);
-                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 2f, 2.4f, 0.2f);
-
-                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0f, 0.25f, 0.15f);
-                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0f, 0.25f, 0.15f);
-
-                    SetColor(Settings.cursorFocusedColor, 0.1f);
-                }
-                else
-                {
-                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 2.4f, 2f, 0.2f);
-                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 2.4f, 2f, 0.2f);
-
-                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0.25f, 0f, 0.15f);
-                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0.25f, 0f, 0.15f);
-
-                    SetColor(Settings.cursorColor, 0.1f);
-                }
-            }
-
-            public void SetSize(float size) => group.transform.localScale = new Vector3(size, size, 1);
-            public void SetColor(Color? color = null, float speed = 0)
-            {
-                if (color == null) color = (hovered == null) ? Settings.cursorColor : Settings.cursorFocusedColor;
-
-                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.r, speed);
-                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.g, speed);
-                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.b, speed);
-                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.a, speed);
-
-                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.r, speed);
-                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.g, speed);
-                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.b, speed);
-                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.a, speed);
-            }
-
-            public void GetHovered()
-            {
-                RaycastHit2D hit = Physics2D.Raycast(group.transform.position, Vector2.zero);
-                if (hit.collider?.gameObject == this.hovered) return;
-
-                this.hovered = hit.collider?.gameObject;
-                Focus(this.hovered != null);
-            }
-            public void GetTargeted()
-            {
-
-            }
-        }
-        #endregion Cursor
 
         public static void ColorObject(GameObject gameObject, float? r = null, float? g = null, float? b = null, float? a = null) => ColorObject(gameObject.GetComponent<Image>(), r.Value, g.Value, b.Value, a.Value);
         public static void ColorObject(GameObject gameObject, Color color) => ColorObject(gameObject.GetComponent<Image>(), color);
@@ -465,6 +390,8 @@ namespace GalaxyRush
             public CanvasGroup canvasGroup;
             public Dictionary<(TransitionComponents component, TransitionUnits unit), Tween> tweens;
 
+            public bool ignoreTimeScale;
+
 
             public Object(GameObject gameObject)
             {
@@ -491,8 +418,9 @@ namespace GalaxyRush
                 SetComponentValue(component, unit, tween.end);
             }
 
-            public int IncrementTweens(float time)
+            public int IncrementTweens(float? time = null)
             {
+                if (time == null) time = ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
                 List<(TransitionComponents component, TransitionUnits unit)> finished = new List<(TransitionComponents, TransitionUnits)>();
 
                 foreach (var kvp in tweens)
@@ -501,7 +429,7 @@ namespace GalaxyRush
                     TransitionUnits unit = kvp.Key.unit;
                     Tween tween = kvp.Value;
 
-                    SetComponentValue(component, unit, tween.Increment(time));
+                    SetComponentValue(component, unit, tween.Increment(time.Value));
                     if (tween.duration == tween.timer) finished.Add(kvp.Key);
                 }
 
@@ -1221,25 +1149,25 @@ namespace GalaxyRush
             objects = new Dictionary<GameObject, Object>();
             tweens = new List<Tween>();
         }
-        public static void IncrementObjects(float time)
+        public static void IncrementObjects()
         {
             if (objects.Count == 0) return;
             Dictionary<GameObject, Object> newObjects = new Dictionary<GameObject, Object>();
 
             foreach (KeyValuePair<GameObject, Object> kvp in objects)
-                if (kvp.Key != null && kvp.Value.IncrementTweens(time) != 0)
+                if (kvp.Key != null && kvp.Value.IncrementTweens() != 0)
                     newObjects.Add(kvp.Key, kvp.Value);
 
             objects = newObjects;
         }
-        public static void IncrementTweens(float time)
+        public static void IncrementTweens()
         {
             if (tweens.Count == 0) return;
             List<Tween> newTweens = new List<Tween>();
 
             foreach (Tween tween in tweens)
             {
-                tween.Increment(time);
+                tween.Increment(Time.deltaTime);
 
                 if (tween.duration != tween.timer)
                     newTweens.Add(tween);
@@ -1248,7 +1176,7 @@ namespace GalaxyRush
             tweens = newTweens;
         }
 
-        public static Object Add(GameObject gameObject, TransitionComponents component, TransitionUnits unit, EaseFunctions function, EaseDirections direction, float start, float end, float duration)
+        public static Object Add(GameObject gameObject, TransitionComponents component, TransitionUnits unit, EaseFunctions function, EaseDirections direction, float start, float end, float duration, bool? ignoreTimeScale = null)
         {
             if (!objects.TryGetValue(gameObject, out Object obj))
             {
@@ -1257,6 +1185,7 @@ namespace GalaxyRush
             }
 
             obj.Set(component, unit, function, direction, start, end, duration);
+            if (ignoreTimeScale != null) obj.ignoreTimeScale = ignoreTimeScale.Value;
             return obj;
         }
         public static void Remove(GameObject gameObject)

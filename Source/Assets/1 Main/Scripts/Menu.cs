@@ -13,6 +13,85 @@ namespace GalaxyRush
         private const float sideMenuYStart = -405;
         private const float sideMenuYEnd = -385;
 
+        #region Cursor
+        [Serializable]
+        public class Cursor : UI.Group
+        {
+            public Image crosshair;
+            public Image dot;
+
+            public GameObject hovered;
+            public Vector3 targeted;
+
+
+            public override void Initialize()
+            {
+                group.alpha = 1;
+                UI.EnableHitboxes(group, false);
+            }
+            public override void Update() { }
+
+            public void Move(Vector2 delta, Vector2 bounds)
+            {
+                float x = Mathf.Clamp(group.transform.localPosition.x + (delta.x * Settings.cursorSensitivity), -bounds.x, bounds.x);
+                float y = Mathf.Clamp(group.transform.localPosition.y + (delta.y * Settings.cursorSensitivity), -bounds.y, bounds.y);
+
+                group.transform.localPosition = new Vector3(x, y, 0);
+            }
+            public void Focus(bool focused)
+            {
+                if (focused)
+                {
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 2f, 2.4f, 0.2f, true);
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 2f, 2.4f, 0.2f, true);
+
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0f, 0.25f, 0.15f, true);
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0f, 0.25f, 0.15f, true);
+
+                    SetColor(Settings.cursorFocusedColor, 0.1f);
+                }
+                else
+                {
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 2.4f, 2f, 0.2f, true);
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 2.4f, 2f, 0.2f, true);
+
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0.25f, 0f, 0.15f, true);
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0.25f, 0f, 0.15f, true);
+
+                    SetColor(Settings.cursorColor, 0.1f);
+                }
+            }
+
+            public void SetSize(float size) => group.transform.localScale = new Vector3(size, size, 1);
+            public void SetColor(Color? color = null, float speed = 0)
+            {
+                if (color == null) color = (hovered == null) ? Settings.cursorColor : Settings.cursorFocusedColor;
+
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.r, speed, true);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.g, speed, true);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.b, speed, true);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.a, speed, true);
+
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.r, speed, true);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.g, speed, true);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.b, speed, true);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.a, speed, true);
+            }
+
+            public void GetHovered()
+            {
+                RaycastHit2D hit = Physics2D.Raycast(group.transform.position, Vector2.zero);
+                if (hit.collider?.gameObject == this.hovered) return;
+
+                this.hovered = hit.collider?.gameObject;
+                Focus(this.hovered != null);
+            }
+            public void GetTargeted()
+            {
+                Focus(false);
+            }
+        }
+        #endregion Cursor
         #region Foreground
         [Serializable]
         public class Foreground : UI.Group
@@ -75,13 +154,13 @@ namespace GalaxyRush
             {
                 if (target == null)
                 {
-                    Transition.Add(effect, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Quartic, EaseDirections.Out, 1, 0, 0.25f);
+                    Transition.Add(effect, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Quartic, EaseDirections.Out, 1, 0, 0.25f, true);
                     effectTarget = null;
                     return;
                 }
 
-                Transition.Add(effect, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Elastic, EaseDirections.Out, effect.transform.localPosition.y, target.transform.localPosition.y, 0.2f);
-                Transition.Add(effect, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Quartic, EaseDirections.Out, 0, 1, 0.2f);
+                Transition.Add(effect, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Elastic, EaseDirections.Out, effect.transform.localPosition.y, target.transform.localPosition.y, 0.2f, true);
+                Transition.Add(effect, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Quartic, EaseDirections.Out, 0, 1, 0.2f, true);
                 effectTarget = target;
             }
         }
@@ -107,7 +186,7 @@ namespace GalaxyRush
                 base.Show(speed);
 
                 group.transform.localPosition = new Vector3(group.transform.localPosition.x, sideMenuYStart, group.transform.localPosition.z);
-                Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, sideMenuYStart, sideMenuYEnd, speed);
+                Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, sideMenuYStart, sideMenuYEnd, speed, true);
 
                 active = true;
             }
@@ -175,6 +254,8 @@ namespace GalaxyRush
                 }
                 public void Update()
                 {
+                    GameObject hovered = (Global.menu != null) ? Global.menu.cursor.hovered : Global.game.cursor.hovered;
+
                     if (active)
                     {
                         if (!Input.click.Held)
@@ -185,7 +266,7 @@ namespace GalaxyRush
 
                         CalculateSlider(false);
                     }
-                    else if (Input.click.Down && Global.menu.cursor.hovered == gauge.gameObject) active = true;
+                    else if (Input.click.Down && hovered == gauge.gameObject) active = true;
                 }
 
                 public void SetText(string text) => textBox.text = text;
@@ -202,7 +283,8 @@ namespace GalaxyRush
                 }
                 public void CalculateSlider(bool forceOnChange)
                 {
-                    knob.position = new Vector2(Global.menu.cursor.group.transform.position.x, knob.position.y);
+                    Cursor cursor = (Global.menu != null) ? Global.menu.cursor : Global.game.cursor;
+                    knob.position = new Vector2(cursor.group.transform.position.x, knob.position.y);
                     int value = FromPosition(knob.anchoredPosition.x);
                     SetSlider();
 
@@ -319,8 +401,9 @@ namespace GalaxyRush
                 {
                     if (active == 0 && Input.click.Down)
                     {
-                        if (Global.menu.cursor.hovered == primary) Focus(1);
-                        else if (Global.menu.cursor.hovered == secondary) Focus(2);
+                        GameObject hovered = (Global.menu != null) ? Global.menu.cursor.hovered : Global.game.cursor.hovered;
+                        if (hovered == primary) Focus(1);
+                        else if (hovered == secondary) Focus(2);
                     }
                     else
                         foreach (KeyCode keycode in Enum.GetValues(typeof(KeyCode)))
@@ -377,35 +460,39 @@ namespace GalaxyRush
                 {
                     if (active)
                     {
-                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Elastic, EaseDirections.Out, 1, 0, 0.3f);
-                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Elastic, EaseDirections.Out, 1, 0.5f, 0.3f);
-                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Elastic, EaseDirections.Out, 0.1f, 0.5f, 0.3f);
+                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Elastic, EaseDirections.Out, 1, 0, 0.3f, true);
+                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Elastic, EaseDirections.Out, 1, 0.5f, 0.3f, true);
+                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Elastic, EaseDirections.Out, 0.1f, 0.5f, 0.3f, true);
                     }
                     else
                     {
-                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Quartic, EaseDirections.Out, 0, 1, 0.2f);
-                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Quartic, EaseDirections.Out, 0.5f, 1, 0.2f);
-                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Quartic, EaseDirections.Out, 0.5f, 0.1f, 0.2f);
+                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Quartic, EaseDirections.Out, 0, 1, 0.2f, true);
+                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Quartic, EaseDirections.Out, 0.5f, 1, 0.2f, true);
+                        Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Quartic, EaseDirections.Out, 0.5f, 0.1f, 0.2f, true);
                     }
                 }
                 public void Error(GameObject button)
                 {
                     button.GetComponent<Image>().color = new Color(1, 0, 0, 1);
-                    Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Quartic, EaseDirections.Out, 0, 1, 0.5f);
-                    Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Quartic, EaseDirections.Out, 0, 1, 0.5f);
-                    Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Quartic, EaseDirections.Out, 0, 0.1f, 0.5f);
+                    Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Quartic, EaseDirections.Out, 0, 1, 0.5f, true);
+                    Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Quartic, EaseDirections.Out, 0, 1, 0.5f, true);
+                    Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Quartic, EaseDirections.Out, 0, 0.1f, 0.5f, true);
                 }
 
                 public async void LockSettings(bool locked)
                 {
-                    UI.EnableHitboxes(Global.menu.settings.group, !locked);
                     await System.Threading.Tasks.Task.Delay(1);
 
                     if (Global.menu != null)
+                    {
+                        UI.EnableHitboxes(Global.menu.settings.group, !locked);
                         Global.menu.settingsLocked = locked;
-
-                    if (Global.game != null)
-                        Debug.Log("Lok");
+                    }
+                    else
+                    {
+                        UI.EnableHitboxes(Global.game.settings.group, !locked);
+                        Global.game.settingsLocked = locked;
+                    }
                 }
             }
             #endregion Keybind Input
@@ -460,9 +547,9 @@ namespace GalaxyRush
 
                 fov.Initialize(Settings.fov, 60, 100, Settings.Fov);
 
-                brightness.Initialize(Settings.brightness, -1, 1, 100, Settings.Brightness);
+                brightness.Initialize(Settings.brightness, -1, 1, 10, Settings.Brightness);
                 contrast.Initialize(Settings.contrast, -100, 100, Settings.Contrast);
-                gamma.Initialize(Settings.gamma, -1, 1, 100, Settings.Gamma);
+                gamma.Initialize(Settings.gamma, -1, 1, 10, Settings.Gamma);
                 saturation.Initialize(Settings.saturation, -100, 100, Settings.Saturation);
                 hueShift.Initialize(Settings.hueShift, -180, 180, Settings.HueShift);
                 bloom.Initialize(Settings.bloom, 0, 20, Settings.Bloom);
@@ -485,9 +572,21 @@ namespace GalaxyRush
             public override void Update()
             {
                 if (!active) return;
-                GameObject hovered = Global.menu.cursor.hovered;
 
-                if (!Global.menu.settingsLocked)
+                GameObject hovered;
+                bool locked;
+                if (Global.menu != null)
+                {
+                    hovered = Global.menu.cursor.hovered;
+                    locked = Global.menu.settingsLocked;
+                }
+                else
+                {
+                    hovered = Global.game.cursor.hovered;
+                    locked = Global.game.settingsLocked;
+                }
+
+                if (!locked)
                 {
                     if (Input.click.Down && hovered != null)
                         if (hovered == close) Hide();
@@ -500,8 +599,8 @@ namespace GalaxyRush
                         float sStart = scrollbar.transform.localPosition.y;
                         float sEnd = Mathf.Lerp(285, scrollbarMax + 285, Mathf.InverseLerp(285, maxScrollHeight + 285, iEnd));
 
-                        Transition.Add(items, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, iStart, iEnd, 0.25f);
-                        Transition.Add(scrollbar, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, sStart, sEnd, 0.25f);
+                        Transition.Add(items, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, iStart, iEnd, 0.25f, true);
+                        Transition.Add(scrollbar, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, sStart, sEnd, 0.25f, true);
                     }
                 }
 
@@ -541,8 +640,16 @@ namespace GalaxyRush
             {
                 base.Show(speed);
 
-                group.transform.localPosition = new Vector3(group.transform.localPosition.x, sideMenuYStart, group.transform.localPosition.z);
-                Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, sideMenuYStart, sideMenuYEnd, speed);
+                if (Global.menu != null)
+                {
+                    group.transform.localPosition = new Vector3(group.transform.localPosition.x, sideMenuYStart, group.transform.localPosition.z);
+                    Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, sideMenuYStart, sideMenuYEnd, speed, true);
+                }
+                else
+                {
+                    group.transform.localPosition = new Vector3(group.transform.localPosition.x, -20, group.transform.localPosition.z);
+                    Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, -20, 0, speed, true);
+                }
 
                 active = true;
             }
@@ -551,6 +658,8 @@ namespace GalaxyRush
                 base.Hide(speed);
 
                 active = false;
+
+                Global.game?.pause.Show();
             }
         }
         #endregion Settings
@@ -575,7 +684,7 @@ namespace GalaxyRush
                 base.Show(speed);
 
                 group.transform.localPosition = new Vector3(group.transform.localPosition.x, sideMenuYStart, group.transform.localPosition.z);
-                Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, sideMenuYStart, sideMenuYEnd, speed);
+                Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, sideMenuYStart, sideMenuYEnd, speed, true);
 
                 active = true;
             }
@@ -587,9 +696,69 @@ namespace GalaxyRush
             }
         }
         #endregion Credits
+        #region Pause
+        [Serializable]
+        public class PauseMenu : UI.Group
+        {
+            public GameObject resume;
+            public GameObject reset;
+            public GameObject settings;
+            public GameObject quit;
+
+            public GameObject close;
+            public bool active;
+
+            public override void Update()
+            {
+                if (!active) return;
+                GameObject hovered = Global.game.cursor.hovered;
+
+                if (Input.click.Down && hovered != null)
+                    if (hovered == resume || hovered == close) Hide();
+                    else if (hovered == reset) { Hide(); }
+                    else if (hovered == settings) { base.Hide(); active = false; Global.game.settings.Show(); }
+                    else if (hovered == quit) Global.loader.Load("Menu");
+            }
+
+            public override void Show(float speed = 0.25F)
+            {
+                base.Show(speed);
+
+                group.transform.localPosition = new Vector3(group.transform.localPosition.x, -20, group.transform.localPosition.z);
+                Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, -20, 0, speed, true);
+
+                active = true;
+
+                Time.timeScale = 0;
+                Global.player.enabled = false;
+                Global.player.leftArm.animator.enabled = false;
+                Global.player.rightArm.animator.enabled = false;
+
+                GameObject.Find("UI Camera").GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>().renderPostProcessing = true;
+                Physics2D.simulationMode = SimulationMode2D.Script;
+            }
+            public override void Hide(float speed = 0.1F)
+            {
+                base.Hide(speed);
+
+                active = false;
+
+                Time.timeScale = 1;
+                Global.player.enabled = true;
+                Global.player.leftArm.animator.enabled = true;
+                Global.player.rightArm.animator.enabled = true;
+
+                GameObject.Find("UI Camera").GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>().renderPostProcessing = false;
+                Physics2D.simulationMode = SimulationMode2D.Update;
+
+                Global.game.cursor.group.transform.localPosition = Vector3.zero;
+                Global.game.cursor.hovered = null;
+            }
+        }
+        #endregion Pause
 
 
-        public UI.Cursor cursor;
+        public Cursor cursor;
         public Foreground foreground;
         public MainMenu main;
         public ChaptersMenu chapters;
@@ -631,8 +800,8 @@ namespace GalaxyRush
         }
         public void Update()
         {
-            Transition.IncrementObjects(Time.deltaTime);
-            Transition.IncrementTweens(Time.deltaTime);
+            Transition.IncrementObjects();
+            Transition.IncrementTweens();
 
             cursor.Move(Input.mouseDelta, bounds.localPosition);
             cursor.GetHovered();

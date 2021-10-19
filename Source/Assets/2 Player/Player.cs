@@ -65,6 +65,7 @@ namespace GalaxyRush
 			public float maxSlowTime = 10;
 
 			[Header("Readonly")]
+			public bool aimed;
 			public int shots;
 			public float shotCharge;
 			public float slowTime;
@@ -130,6 +131,8 @@ namespace GalaxyRush
 			movement.armSwing = 2;
 			powers.shots = powers.maxShots;
 			powers.slowTime = powers.maxSlowTime;
+
+			Global.player = this;
 		}
 
 		public void Update()
@@ -167,6 +170,17 @@ namespace GalaxyRush
 
 			if (lane != movement.lane)
 			{
+				if (lane > movement.lane)
+                {
+					leftArm.Animate(Arm.strafeOut);
+					rightArm.Animate(Arm.strafeIn);
+                }
+				else
+				{
+					leftArm.Animate(Arm.strafeIn);
+					rightArm.Animate(Arm.strafeOut);
+				}
+
 				movement.strafeCooldown = 0;
 				Transition.Add(v => SetPosition(v, null, null), EaseFunctions.Cubic, EaseDirections.Out, movement.lane * movement.strafeDistance, lane * movement.strafeDistance, movement.strafeTime);
 				movement.lane = lane;
@@ -243,6 +257,7 @@ namespace GalaxyRush
 		public void TurnHead()
 		{
 			Vector2 turn = Input.mouseDelta;
+			if (powers.aimed) turn *= 0.5f;
 			head.yaw = SoftTurn(head.yaw, turn.x * Settings.lookSensitivity, 75);
 			head.pitch = SoftTurn(head.pitch, turn.y * -Settings.lookSensitivity, 89.9f);
 
@@ -274,6 +289,7 @@ namespace GalaxyRush
 		{
 			if (Input.aim.Held && powers.slowTime > 0)
 			{
+				powers.aimed = true;
 				powers.slowTime -= Time.unscaledDeltaTime;
 				Time.timeScale = 0.2f;
 				rightArm.Animate(Arm.aim, true);
@@ -281,6 +297,7 @@ namespace GalaxyRush
 			}
 			else
 			{
+				powers.aimed = false;
 				powers.slowTime = Mathf.Clamp(powers.slowTime + Time.unscaledDeltaTime, 0, powers.maxSlowTime);
 				Time.timeScale = 1;
 				rightArm.Animate(Arm.aim, false);
