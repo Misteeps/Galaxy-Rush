@@ -208,10 +208,10 @@ namespace Game
 
             public void Move(Vector2 delta, Vector2 bounds)
             {
-                float x = Mathf.Clamp(group.transform.position.x + delta.x * Settings.cursorSensitivity, 0, bounds.x);
-                float y = Mathf.Clamp(group.transform.position.y + delta.y * Settings.cursorSensitivity, 0, bounds.y);
+                float x = Mathf.Clamp(group.transform.localPosition.x + (delta.x * Settings.cursorSensitivity), -bounds.x, bounds.x);
+                float y = Mathf.Clamp(group.transform.localPosition.y + (delta.y * Settings.cursorSensitivity), -bounds.y, bounds.y);
 
-                group.transform.position = new Vector3(x, y, 0);
+                group.transform.localPosition = new Vector3(x, y, 0);
             }
             public void Active(bool active)
             {
@@ -259,7 +259,7 @@ namespace Game
     #endregion UI
 
     #region Transition
-    public enum TransitionComponents { Position, Rotation, Scale, UIColor, UIAlpha }
+    public enum TransitionComponents { Position, LocalPosition, Rotation, Scale, UIColor, UIAlpha }
     public enum TransitionUnits { X, Y, Z, W, R, G, B, A }
     public enum EaseFunctions { Linear, Quadratic, Cubic, Quartic, Quintic, Sine, Circular, Exponential, Elastic, Back, Bounce }
     public enum EaseDirections { In, Out, InOut }
@@ -343,6 +343,16 @@ namespace Game
                                 default: Debug.LogError($"Failed transitioning object. GCV: Unit {unit} not found in Component {component}"); return 0;
                             }
 
+                    case TransitionComponents.LocalPosition:
+                        if (transform == null) { Debug.LogError($"Failed transitioning object. GCV: Object does not contain {component} component"); return 0; }
+                        else switch (unit)
+                            {
+                                case TransitionUnits.X: return transform.localPosition.x;
+                                case TransitionUnits.Y: return transform.localPosition.y;
+                                case TransitionUnits.Z: return transform.localPosition.z;
+                                default: Debug.LogError($"Failed transitioning object. GCV: Unit {unit} not found in Component {component}"); return 0;
+                            }
+
                     case TransitionComponents.Rotation:
                         if (transform == null) { Debug.LogError($"Failed transitioning object. GCV: Object does not contain {component} component"); return 0; }
                         else switch (unit)
@@ -392,6 +402,17 @@ namespace Game
                                 case TransitionUnits.X: SetPosition(value, null, null); break;
                                 case TransitionUnits.Y: SetPosition(null, value, null); break;
                                 case TransitionUnits.Z: SetPosition(null, null, value); break;
+                                default: Debug.LogError($"Failed transitioning object. SCV: Unit {unit} not found in Component {component}"); break;
+                            }
+                        break;
+
+                    case TransitionComponents.LocalPosition:
+                        if (transform == null) { Debug.LogError($"Failed transitioning object. SCV: Object does not contain {component} component"); }
+                        else switch (unit)
+                            {
+                                case TransitionUnits.X: SetLocalPosition(value, null, null); break;
+                                case TransitionUnits.Y: SetLocalPosition(null, value, null); break;
+                                case TransitionUnits.Z: SetLocalPosition(null, null, value); break;
                                 default: Debug.LogError($"Failed transitioning object. SCV: Unit {unit} not found in Component {component}"); break;
                             }
                         break;
@@ -449,6 +470,16 @@ namespace Game
                 SetPosition(new Vector3(x.Value, y.Value, z.Value));
             }
             public void SetPosition(Vector3 position) => transform.position = position;
+
+            public void SetLocalPosition(float? x = null, float? y = null, float? z = null)
+            {
+                if (x == null) x = transform.localPosition.x;
+                if (y == null) y = transform.localPosition.y;
+                if (z == null) z = transform.localPosition.z;
+
+                SetLocalPosition(new Vector3(x.Value, y.Value, z.Value));
+            }
+            public void SetLocalPosition(Vector3 position) => transform.localPosition = position;
 
             public void SetRotation(float? x = null, float? y = null, float? z = null)
             {
