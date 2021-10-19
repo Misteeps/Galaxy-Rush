@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 
 namespace GalaxyRush
@@ -19,6 +21,7 @@ namespace GalaxyRush
         public static Menu menu;
         public static Game game;
         public static SceneLoader loader;
+        public static Camera camera;
 
 
         public static void Initialize()
@@ -59,21 +62,51 @@ namespace GalaxyRush
 
         public static void Initialize()
         {
-            if (initialized) return;
-            initialized = true;
+            if (!initialized)
+            {
+                Defaults();
+                initialized = true;
+            }
 
-            CursorSensitivity(2);
+            CursorSensitivity(cursorSensitivity);
+            LookSensitivity(lookSensitivity);
+
+            CursorSize(cursorSize);
+            CursorColor(cursorColor);
+            CursorFocusedColor(cursorFocusedColor);
+
+            Fov(fov);
+
+            Brightness(brightness);
+            Contrast(contrast);
+            Gamma(gamma);
+            Saturation(saturation);
+            HueShift(hueShift);
+            Bloom(bloom);
+            ChromaticAberration(chromaticAberration);
+
+            SFXVolume(sfxVolume);
+            MusicVolume(musicVolume);
+        }
+        public static void Defaults()
+        {
+            CursorSensitivity(20);
+            LookSensitivity(10);
+
+#if UNITY_EDITOR
+            CursorSensitivity(1);
             LookSensitivity(1);
+#endif
 
             CursorSize(10);
-            CursorColor(new Color(1, 1, 1));
-            CursorFocusedColor(new Color(1, 1, 1));
+            CursorColor(new Color(1, 1, 1, 0.5f));
+            CursorFocusedColor(new Color(1, 0.5f, 0.5f, 1));
 
             Fov(80);
 
-            Brightness(1);
+            Brightness(0);
             Contrast(0);
-            Gamma(1);
+            Gamma(0);
             Saturation(0);
             HueShift(0);
             Bloom(5);
@@ -114,35 +147,58 @@ namespace GalaxyRush
         public static void Fov(float value)
         {
             fov = value;
+
+            Global.camera.GetComponent<Cinemachine.CinemachineVirtualCamera>().m_Lens.FieldOfView = value;
         }
 
         public static void Brightness(float value)
         {
             brightness = value;
+
+            Global.camera.GetComponent<Volume>().profile.TryGet(out LiftGammaGain component);
+            component.gain.value = Vector4.one * value;
         }
         public static void Contrast(float value)
         {
             contrast = value;
+
+            Global.camera.GetComponent<Volume>().profile.TryGet(out ColorAdjustments component);
+            component.contrast.value = value;
         }
         public static void Gamma(float value)
         {
             gamma = value;
+
+            Global.camera.GetComponent<Volume>().profile.TryGet(out LiftGammaGain component);
+            component.gamma.value = Vector4.one * value;
         }
         public static void Saturation(float value)
         {
             saturation = value;
+
+            Global.camera.GetComponent<Volume>().profile.TryGet(out ColorAdjustments component);
+            component.saturation.value = value;
         }
         public static void HueShift(float value)
         {
             hueShift = value;
+
+            Global.camera.GetComponent<Volume>().profile.TryGet(out ColorAdjustments component);
+            component.hueShift.value = value;
         }
         public static void Bloom(float value)
         {
             bloom = value;
+
+            Global.camera.GetComponent<Volume>().profile.TryGet(out Bloom component);
+            component.intensity.value = (Global.menu != null) ? value / 2 : value;
         }
         public static void ChromaticAberration(float value)
         {
             chromaticAberration = value;
+
+            Global.camera.GetComponent<Volume>().profile.TryGet(out ChromaticAberration component);
+            component.intensity.value = value;
         }
 
         public static void SFXVolume(float value)

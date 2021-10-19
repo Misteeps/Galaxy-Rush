@@ -400,7 +400,12 @@ namespace GalaxyRush
                 {
                     UI.EnableHitboxes(Global.menu.settings.group, !locked);
                     await System.Threading.Tasks.Task.Delay(1);
-                    Global.menu.settingsLocked = locked;
+
+                    if (Global.menu != null)
+                        Global.menu.settingsLocked = locked;
+
+                    if (Global.game != null)
+                        Debug.Log("Lok");
                 }
             }
             #endregion Keybind Input
@@ -453,11 +458,11 @@ namespace GalaxyRush
                 cursorColor.Initialize(Settings.cursorColor, Settings.CursorColor);
                 cursorFocusedColor.Initialize(Settings.cursorFocusedColor, Settings.CursorFocusedColor);
 
-                fov.Initialize(Settings.fov, 60, 120, Settings.Fov);
+                fov.Initialize(Settings.fov, 60, 100, Settings.Fov);
 
-                brightness.Initialize(Settings.brightness, 0.1f, 2, 100, Settings.Brightness);
+                brightness.Initialize(Settings.brightness, -1, 1, 100, Settings.Brightness);
                 contrast.Initialize(Settings.contrast, -100, 100, Settings.Contrast);
-                gamma.Initialize(Settings.gamma, 0.1f, 2, 100, Settings.Gamma);
+                gamma.Initialize(Settings.gamma, -1, 1, 100, Settings.Gamma);
                 saturation.Initialize(Settings.saturation, -100, 100, Settings.Saturation);
                 hueShift.Initialize(Settings.hueShift, -180, 180, Settings.HueShift);
                 bloom.Initialize(Settings.bloom, 0, 20, Settings.Bloom);
@@ -604,6 +609,8 @@ namespace GalaxyRush
             Global.menu = this;
             Global.game = null;
             Global.loader = GameObject.FindWithTag("Scene Loader").GetComponent<SceneLoader>();
+            Global.camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+
             Global.loader.gameObject.SetActive(false);
 
             Global.Initialize();
