@@ -243,17 +243,17 @@ namespace Game
                 case KeyCode.Alpha7: return "7";
                 case KeyCode.Alpha8: return "8";
                 case KeyCode.Alpha9: return "9";
-                //case KeyCode.BackQuote: return "`";
-                //case KeyCode.Minus: return "-";
-                //case KeyCode.Equals: return "=";
-                //case KeyCode.LeftBracket: return "[";
-                //case KeyCode.RightBracket: return "]";
-                //case KeyCode.Backslash: return "\\";
-                //case KeyCode.Semicolon: return ";";
-                //case KeyCode.Quote: return "'";
-                //case KeyCode.Comma: return ",";
-                //case KeyCode.Period: return ".";
-                //case KeyCode.Slash: return "/";
+                case KeyCode.BackQuote: return "`";
+                case KeyCode.Minus: return "-";
+                case KeyCode.Equals: return "=";
+                case KeyCode.LeftBracket: return "[";
+                case KeyCode.RightBracket: return "]";
+                case KeyCode.Backslash: return "\\";
+                case KeyCode.Semicolon: return ";";
+                case KeyCode.Quote: return "'";
+                case KeyCode.Comma: return ",";
+                case KeyCode.Period: return ".";
+                case KeyCode.Slash: return "/";
             }
         }
     }
