@@ -7802,6 +7802,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: slow.max
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: leftArm.mesh
       value: 
       objectReference: {fileID: 1122347248}
@@ -7821,6 +7825,10 @@ PrefabInstance:
       propertyPath: leftArm.animator
       value: 
       objectReference: {fileID: 1122347249}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: shots.chargeTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: rightArm.animator
       value: 

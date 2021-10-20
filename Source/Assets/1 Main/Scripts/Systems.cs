@@ -94,11 +94,6 @@ namespace GalaxyRush
             CursorSensitivity(20);
             LookSensitivity(10);
 
-#if UNITY_EDITOR
-            CursorSensitivity(1);
-            LookSensitivity(1);
-#endif
-
             CursorSize(10);
             CursorColor(new Color(1, 1, 1, 0.5f));
             CursorFocusedColor(new Color(1, 0.5f, 0.5f, 1));
@@ -110,11 +105,17 @@ namespace GalaxyRush
             Gamma(0);
             Saturation(0);
             HueShift(0);
-            Bloom(5);
+            Bloom(4);
             ChromaticAberration(0);
 
             SFXVolume(40);
             MusicVolume(40);
+
+#if UNITY_EDITOR
+            CursorSensitivity(1);
+            LookSensitivity(1);
+            Fov(100);
+#endif
         }
 
         public static void CursorSensitivity(float value)

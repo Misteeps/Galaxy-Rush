@@ -62,7 +62,7 @@ namespace GalaxyRush
 		{
 			public GameObject prefab;
 			public Transform position;
-			//public int max = 7;
+			public int max = 7;
 			public float chargeTime = 5;
 
 			[Header("Readonly")]
@@ -145,7 +145,9 @@ namespace GalaxyRush
 			Arm.SetIDs();
 			movement.armSwing = 2;
 
-			shots.shots = new Transform[7];
+			shots.shots = new Transform[8];
+			for (int i = 0; i < 4; i++) AddShot();
+			slow.amount = slow.max;
 
 			Global.player = this;
 		}
@@ -163,15 +165,15 @@ namespace GalaxyRush
 
 
 			MoveShots();
-			if (shots.amount < 7)
-            {
+			if (shots.amount < shots.max)
+			{
 				shots.chargeTimer += Time.unscaledDeltaTime;
 				if (shots.chargeTimer >= shots.chargeTime)
 					AddShot();
 			}
 
 			Aim(Input.aim.Held && slow.amount > 0);
-			if (Input.shoot.Down) rightArm.Animate(Arm.shoot);
+			if (Input.shoot.Down && shots.amount > 0) Shoot();
 
 
 			movement.armSwing += movement.armSpeed * Time.unscaledDeltaTime;
@@ -194,10 +196,10 @@ namespace GalaxyRush
 			if (lane != movement.lane)
 			{
 				if (lane > movement.lane)
-                {
+				{
 					leftArm.Animate(Arm.strafeOut);
 					rightArm.Animate(Arm.strafeIn);
-                }
+				}
 				else
 				{
 					leftArm.Animate(Arm.strafeIn);
@@ -333,34 +335,46 @@ namespace GalaxyRush
 		}
 		public void Shoot()
 		{
-			if (shots.current == 6) shots.current = 0;
+			Destroy(shots.shots[shots.current].gameObject, 0.25f);
+			shots.shots[shots.current] = null;
+
+			//shots.position.Rotate(Vector3.forward * -45, Space.Self);
+			//Transition.Add(shots.position.gameObject, TransitionComponents.Rotation, TransitionUnits.Z, EaseFunctions.Quintic, EaseDirections.InOut, shots.current * -45, (shots.current + 1) * -45, 1f, true);
+
+			if (shots.current == 7) shots.current = 0;
 			else shots.current++;
+			shots.amount--;
+
+			rightArm.Animate(Arm.shoot);
 		}
 
 		public void MoveShots()
-        {
-			for (int i = 0; i < 7; i++)
+		{
+			shots.position.localRotation = Quaternion.Slerp(shots.position.localRotation, Quaternion.Euler(0, 0, shots.current * -45), Time.unscaledDeltaTime * 25);
+
+			for (int i = 0; i < 8; i++)
 				if (shots.shots[i] != null)
 				{
 					Transform shot = shots.shots[i];
 					Transform target = shots.position.GetChild(i);
 
-					shot.position = target.position;
-					shot.rotation = target.rotation;
+					shot.position = Vector3.Lerp(shot.position, target.position, Time.unscaledDeltaTime * 100);
+					shot.rotation = Quaternion.Slerp(shot.rotation, target.rotation, Time.unscaledDeltaTime * 25);
 				}
-        }
+		}
 		public void AddShot()
-        {
+		{
 			GameObject shot = Instantiate(shots.prefab);
 			shot.name = $"Shot {shots.charging}";
+			shot.transform.position = shots.position.position;
 
 			shots.shots[shots.charging] = shot.transform;
 
-			if (shots.charging == 6) shots.charging = 0;
+			if (shots.charging == 7) shots.charging = 0;
 			else shots.charging++;
 			shots.amount++;
 			shots.chargeTimer = 0;
-        }
+		}
 
 
 		public void SetPosition(float? x = null, float? y = null, float? z = null)
