@@ -350,6 +350,7 @@ namespace GalaxyRush
 
 			Vector3 start = shot.transform.position;
 			Vector3 end = Global.game.cursor.targeted;
+			Vector3 direction = (end - start).normalized;
 			float time = Vector3.Distance(start, end) / 100;
 
 			Transition.Add(shot, TransitionComponents.Position, TransitionUnits.X, EaseFunctions.Linear, EaseDirections.InOut, start.x, end.x, time, true);
@@ -359,6 +360,8 @@ namespace GalaxyRush
 			Transition.Add(shot, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Linear, EaseDirections.InOut, 1, 4, time, true);
 			Transition.Add(shot, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Linear, EaseDirections.InOut, 1, 4, time, true);
 			Transition.Add(shot, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Linear, EaseDirections.InOut, 1, 4, time, true);
+
+			shot.transform.rotation = Quaternion.LookRotation(direction);
 
 			Destroy(shot, time);
 
