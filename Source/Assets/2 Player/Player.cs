@@ -56,21 +56,36 @@ namespace GalaxyRush
 			public float armSwing;
 		}
 		#endregion Movement
-		#region Powers
+		#region Shots
 		[Serializable]
-		public class Powers
+		public class Shots
 		{
-			public int maxShots = 6;
-			public float shotChargeTime = 2;
-			public float maxSlowTime = 10;
+			public GameObject prefab;
+			public Transform position;
+			//public int max = 7;
+			public float chargeTime = 5;
 
 			[Header("Readonly")]
-			public bool aimed;
-			public int shots;
-			public float shotCharge;
-			public float slowTime;
+			public Transform[] shots;
+			public int amount;
+			public int current;
+			public int charging;
+			public float chargeTimer;
 		}
-		#endregion Powers
+		#endregion Shots
+		#region Slow
+		[Serializable]
+		public class Slow
+		{
+			public GameObject prefab;
+			public Transform position;
+			public float max = 10;
+
+			[Header("Readonly")]
+			public float amount;
+			public bool active;
+		}
+		#endregion Slow
 		#region Arm
 		[Serializable]
 		public class Arm
@@ -114,23 +129,23 @@ namespace GalaxyRush
 		#endregion Arm
 
 
-		public CharacterController controller;
-		public Transform cameraPosition;
-
 		public Head head;
 		public Movement movement;
-		public Powers powers;
+		public Shots shots;
+		public Slow slow;
 		public Arm rightArm;
 		public Arm leftArm;
+
+		public CharacterController controller;
+		public Transform cameraPosition;
 
 
 		public void Start()
 		{
 			Arm.SetIDs();
-
 			movement.armSwing = 2;
-			powers.shots = powers.maxShots;
-			powers.slowTime = powers.maxSlowTime;
+
+			shots.shots = new Transform[7];
 
 			Global.player = this;
 		}
@@ -147,7 +162,15 @@ namespace GalaxyRush
 			controller.Move(new Vector3(0, y, z));
 
 
-			Aim();
+			MoveShots();
+			if (shots.amount < 7)
+            {
+				shots.chargeTimer += Time.unscaledDeltaTime;
+				if (shots.chargeTimer >= shots.chargeTime)
+					AddShot();
+			}
+
+			Aim(Input.aim.Held && slow.amount > 0);
 			if (Input.shoot.Down) rightArm.Animate(Arm.shoot);
 
 
@@ -257,7 +280,7 @@ namespace GalaxyRush
 		public void TurnHead()
 		{
 			Vector2 turn = Input.mouseDelta;
-			if (powers.aimed) turn *= 0.5f;
+			if (slow.active) turn *= 0.5f;
 			head.yaw = SoftTurn(head.yaw, turn.x * Settings.lookSensitivity, 75);
 			head.pitch = SoftTurn(head.pitch, turn.y * -Settings.lookSensitivity, 89.9f);
 
@@ -285,25 +308,59 @@ namespace GalaxyRush
 		}
 
 
-		public void Aim()
+		public void Aim(bool value)
 		{
-			if (Input.aim.Held && powers.slowTime > 0)
+			if (value)
 			{
-				powers.aimed = true;
-				powers.slowTime -= Time.unscaledDeltaTime;
+				slow.active = true;
+				slow.amount -= Time.unscaledDeltaTime;
+
 				Time.timeScale = 0.2f;
+
 				rightArm.Animate(Arm.aim, true);
 				leftArm.Animate(Arm.slowTime, true);
 			}
 			else
 			{
-				powers.aimed = false;
-				powers.slowTime = Mathf.Clamp(powers.slowTime + Time.unscaledDeltaTime, 0, powers.maxSlowTime);
+				slow.active = false;
+				slow.amount = Mathf.Clamp(slow.amount + Time.unscaledDeltaTime, 0, slow.max);
+
 				Time.timeScale = 1;
+
 				rightArm.Animate(Arm.aim, false);
 				leftArm.Animate(Arm.slowTime, false);
 			}
 		}
+		public void Shoot()
+		{
+			if (shots.current == 6) shots.current = 0;
+			else shots.current++;
+		}
+
+		public void MoveShots()
+        {
+			for (int i = 0; i < 7; i++)
+				if (shots.shots[i] != null)
+				{
+					Transform shot = shots.shots[i];
+					Transform target = shots.position.GetChild(i);
+
+					shot.position = target.position;
+					shot.rotation = target.rotation;
+				}
+        }
+		public void AddShot()
+        {
+			GameObject shot = Instantiate(shots.prefab);
+			shot.name = $"Shot {shots.charging}";
+
+			shots.shots[shots.charging] = shot.transform;
+
+			if (shots.charging == 6) shots.charging = 0;
+			else shots.charging++;
+			shots.amount++;
+			shots.chargeTimer = 0;
+        }
 
 
 		public void SetPosition(float? x = null, float? y = null, float? z = null)

@@ -110,8 +110,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 8823702982601562742}
   cameraPosition: {fileID: 8823702981431682636}
+  shots: {fileID: 0}
   head:
-    lookSensitivity: 1
     softClamp: 25
     yaw: 0
     pitch: 0
@@ -144,6 +144,7 @@ MonoBehaviour:
     maxShots: 6
     shotChargeTime: 2
     maxSlowTime: 10
+    aimed: 0
     shots: 0
     shotCharge: 0
     slowTime: 0
