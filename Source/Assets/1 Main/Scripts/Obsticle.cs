@@ -86,12 +86,15 @@ namespace GalaxyRush
         }
         #endregion Step
 
+        public int targets;
+
         public Object[] objects;
         public Step[] steps;
 
         public int activationStep;
         public TransitionAction[] activations;
 
+        public int targetsHit;
         public int currentStep;
         public int nextStep;
         public float timer;
@@ -101,6 +104,9 @@ namespace GalaxyRush
         {
             foreach (Object obj in objects)
                 obj.GetDefaults();
+
+            if (steps.Length == 0)
+                enabled = false;
         }
         public virtual void Update()
         {
@@ -110,6 +116,20 @@ namespace GalaxyRush
                 SetStep(nextStep);
         }
 
+        public void TargetHit(int value)
+        {
+            targetsHit += value;
+            if (targetsHit < 0) Debug.LogWarning("Targets Hit Less than 0");
+            else if (targetsHit > targets) Debug.LogWarning("Targets Hit More than Max");
+
+            if (targetsHit == targets)
+            {
+                Activate();
+                enabled = false;
+            }
+            else if (steps.Length != 0)
+                enabled = true;
+        }
         public virtual void Activate()
         {
             SetStep(activationStep, false);
