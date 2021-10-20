@@ -84,6 +84,9 @@ ModelImporter:
   - first:
       74: 5522812681064789136
     second: Run
+  - first:
+      74: 2377571621158638681
+    second: Menu
   externalObjects: {}
   materials:
     materialImportMode: 0
@@ -173,35 +176,6 @@ ModelImporter:
     - serializedVersion: 16
       name: Crush Time
       takeName: Skeleton|Crush Time
-      internalID: 0
-      firstFrame: 0
-      lastFrame: 30
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Death
-      takeName: Skeleton|Death
       internalID: 0
       firstFrame: 0
       lastFrame: 30
@@ -466,6 +440,35 @@ ModelImporter:
       internalID: 0
       firstFrame: 0
       lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Menu
+      takeName: Skeleton|Menu
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 1200
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
