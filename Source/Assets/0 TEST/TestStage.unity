@@ -3179,7 +3179,7 @@ Transform:
   m_GameObject: {fileID: 1060313951}
   m_LocalRotation: {x: 0.08715578, y: 0.9961947, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0.8}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1364221402}
   - {fileID: 1827102548}
@@ -4077,6 +4077,11 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5547845870182982335, guid: a0b9a27f246f0a64f8c1b237e2a706e4, type: 3}
   m_PrefabInstance: {fileID: 1237677419}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1300597607 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2365995746024846318, guid: 9ff95dd007a9d71459a938c5f9ffc8d3, type: 3}
+  m_PrefabInstance: {fileID: 6319353080220191114}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1357259369
 GameObject:
@@ -8031,9 +8036,17 @@ PrefabInstance:
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
-      propertyPath: slow.max
-      value: 100
-      objectReference: {fileID: 0}
+      propertyPath: slow.star
+      value: 
+      objectReference: {fileID: 1827102548}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: slow.clock
+      value: 
+      objectReference: {fileID: 1364221402}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: slow.sphere
+      value: 
+      objectReference: {fileID: 1060313952}
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: leftArm.mesh
       value: 
@@ -8046,6 +8059,14 @@ PrefabInstance:
       propertyPath: rightArm.mesh
       value: 
       objectReference: {fileID: 1992704710837416461}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: slow.cooldown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: slow.position
+      value: 
+      objectReference: {fileID: 1300597607}
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: shots.position
       value: 
@@ -8062,6 +8083,10 @@ PrefabInstance:
       propertyPath: rightArm.animator
       value: 
       objectReference: {fileID: 2635658760947062118}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: slow.clockRenderer
+      value: 
+      objectReference: {fileID: 1364221403}
     - target: {fileID: 8823702982601562744, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: m_Name
       value: Player

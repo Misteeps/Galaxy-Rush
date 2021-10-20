@@ -15,7 +15,7 @@ namespace GalaxyRush
         public float timer;
 
         public new MeshRenderer renderer;
-        public MaterialPropertyBlock block;
+        public MaterialPropertyBlock mat;
         public Color normalBase = new Color(0, 0, 0, 0.4f);
         public Color normalColor = new Color(1, 0, 0, 1);
         public Color hitBase = new Color(0, 0, 0, 0);
@@ -26,7 +26,7 @@ namespace GalaxyRush
         {
             enabled = false;
             renderer = GetComponent<MeshRenderer>();
-            block = new MaterialPropertyBlock();
+            mat = new MaterialPropertyBlock();
         }
         public void Update()
         {
@@ -60,10 +60,10 @@ namespace GalaxyRush
         }
         public void SetColors(Color _base, Color _color)
         {
-            block.SetColor("Base", _base);
-            block.SetColor("_Color", _color);
+            mat.SetColor("Base", _base);
+            mat.SetColor("_Color", _color);
 
-            renderer.SetPropertyBlock(block, 1);
+            renderer.SetPropertyBlock(mat, 1);
         }
 
         public void OnTriggerEnter(Collider other)

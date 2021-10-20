@@ -79,13 +79,21 @@ namespace GalaxyRush
 		[Serializable]
 		public class Slow
 		{
-			public GameObject prefab;
+			public Transform sphere;
+			public Transform clock;
+			public MeshRenderer clockRenderer;
+			public Transform star;
 			public Transform position;
 			public float max = 10;
+			public float cooldown = 2;
 
 			[Header("Readonly")]
+			public MaterialPropertyBlock mat;
+			public int matColorID;
 			public float amount;
 			public bool active;
+			public float start;
+			public float timer;
 		}
 		#endregion Slow
 		#region Arm
@@ -173,7 +181,8 @@ namespace GalaxyRush
 					AddShot();
 			}
 
-			Aim(Input.aim.Held && slow.amount > 0);
+			slow.timer += Time.unscaledDeltaTime;
+			Aim(Input.aim.Held && slow.amount > 0 && slow.timer > slow.cooldown);
 			if (Input.shoot.Down && shots.amount > 0) Shoot();
 
 
@@ -314,33 +323,61 @@ namespace GalaxyRush
 
 		public void Aim(bool value)
 		{
+			bool start = slow.active != value;
+
 			if (value)
 			{
+				Time.timeScale = 0.2f;
 				slow.active = true;
 				slow.amount -= Time.unscaledDeltaTime;
 
-				Time.timeScale = 0.2f;
+				if (start)
+				{
+					slow.start = slow.amount;
 
-				rightArm.Animate(Arm.aim, true);
-				leftArm.Animate(Arm.slowTime, true);
+					rightArm.Animate(Arm.aim, true);
+					leftArm.Animate(Arm.slowTime, true);
 
-				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
-				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
-				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
+					Transition.Add(slow.sphere.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.In, 0, 0.15f, 0.5f, true);
+					Transition.Add(slow.sphere.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.In, 0, 0.15f, 0.5f, true);
+					Transition.Add(slow.sphere.gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Exponential, EaseDirections.In, 0, 0.15f, 0.5f, true);
+
+					Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
+					Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
+					Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
+
+					slow.mat = new MaterialPropertyBlock();
+					slow.matColorID = Shader.PropertyToID("_Color");
+				}
+
+				float x = Mathf.InverseLerp(0, slow.start, slow.amount);
+				slow.sphere.position = slow.position.position;
+				slow.clock.localEulerAngles = Vector3.up * Mathf.Lerp(-30, 360, x);
+				slow.star.Rotate(Vector3.up * Time.unscaledDeltaTime * 20);
+				slow.mat.SetColor(slow.matColorID, Color.HSVToRGB(Mathf.Lerp(0, 0.5f, x), 1, 1));
+				slow.clockRenderer.SetPropertyBlock(slow.mat, 0);
 			}
 			else
 			{
+				Time.timeScale = 1;
 				slow.active = false;
 				slow.amount = Mathf.Clamp(slow.amount + Time.unscaledDeltaTime, 0, slow.max);
 
-				Time.timeScale = 1;
+				if (start)
+                {
+					slow.timer = 0;
 
-				rightArm.Animate(Arm.aim, false);
-				leftArm.Animate(Arm.slowTime, false);
+					rightArm.Animate(Arm.aim, false);
+					leftArm.Animate(Arm.slowTime, false);
 
-				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
-				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
-				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
+					Transition.Add(slow.sphere.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0.15f, 0, 0.2f, true);
+					Transition.Add(slow.sphere.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0.15f, 0, 0.2f, true);
+					Transition.Add(slow.sphere.gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Exponential, EaseDirections.Out, 0.15f, 0, 0.2f, true);
+
+					Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
+					Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
+					Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
+				}
 			}
 		}
 		public void Shoot()

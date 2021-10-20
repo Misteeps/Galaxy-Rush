@@ -646,7 +646,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": 0.0,
-    "m_FloatType": 1,
+    "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
         "y": 20.0
@@ -1917,7 +1917,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "_width",
     "m_StageCapability": 2,
-    "m_Value": 0.949999988079071,
+    "m_Value": 0.8999999761581421,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
