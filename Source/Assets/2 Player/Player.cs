@@ -363,6 +363,7 @@ namespace GalaxyRush
 
 			shot.transform.rotation = Quaternion.LookRotation(direction);
 
+			shot.GetComponent<Collider>().enabled = true;
 			TrailRenderer trail = shot.GetComponent<TrailRenderer>();
 			trail.enabled = true;
 			trail.startColor = Color.HSVToRGB(Mathf.InverseLerp(-1, 1, Mathf.Sin(Time.unscaledTime * 0.5f)), 1, 1);
