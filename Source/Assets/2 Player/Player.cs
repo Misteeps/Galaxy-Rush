@@ -31,7 +31,7 @@ namespace GalaxyRush
 			public float armSpeed = 2;
 
 			[Space(4)]
-			public float strafeTime = 0.25f;
+			public float strafeTime = 0.1f;
 			public float strafeDistance = 3;
 
 			[Space(4)]

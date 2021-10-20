@@ -118,7 +118,7 @@ MonoBehaviour:
     speedModifier: 1
     acceleration: 8
     armSpeed: 2
-    strafeTime: 0.25
+    strafeTime: 0.1
     strafeDistance: 3
     jumpHeight: 2.4
     doubleJumpHeight: 3.2
