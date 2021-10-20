@@ -688,6 +688,9 @@ namespace GalaxyRush
 
         public Transform bounds;
         public Transform view;
+        public Transform shots;
+        public Transform earth;
+        public Transform earthClouds;
 
         public bool settingsLocked;
 
@@ -727,6 +730,9 @@ namespace GalaxyRush
             cursor.Move(Input.mouseDelta, bounds.localPosition);
             cursor.GetHovered();
 
+            MoveShots();
+            MoveEarth();
+
             if (settingsLocked)
             {
                 settings.Update();
@@ -763,6 +769,28 @@ namespace GalaxyRush
             chapters.Hide();
             settings.Hide();
             credits.Hide();
+        }
+
+        public void MoveShots()
+        {
+            shots.Rotate(Vector3.forward * Time.deltaTime * -10);
+        }
+        public void MoveEarth()
+        {
+            earth.Rotate(Vector3.up * Time.deltaTime * -2);
+            earthClouds.Rotate(Vector3.up * Time.deltaTime * -0.5f);
+
+
+            if (earth.position.y >= -240)
+            {
+                earth.position += new Vector3(0, -0.1f, 0);
+                Transition.Add(earth.gameObject, TransitionComponents.Position, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.InOut, -240, -320, 8);
+            }
+            else if (earth.position.y <= -320)
+            {
+                earth.position += new Vector3(0, 0.1f, 0);
+                Transition.Add(earth.gameObject, TransitionComponents.Position, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.InOut, -320, -240, 8);
+            }
         }
     }
 }

@@ -7883,10 +7883,6 @@ PrefabInstance:
       propertyPath: rightArm.animator
       value: 
       objectReference: {fileID: 2635658760947062118}
-    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
-      propertyPath: movement.strafeTime
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562744, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: m_Name
       value: Player
