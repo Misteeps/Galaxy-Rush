@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Arm Material
+  m_Name: Time Sphere Material
   m_Shader: {fileID: -6465566751694194690, guid: f4a7b83deb1ba7b46858bb1e534deb3d, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4

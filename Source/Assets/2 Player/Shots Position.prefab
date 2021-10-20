@@ -130,7 +130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4468933709914479536}
   m_Layer: 0
-  m_Name: Shots
+  m_Name: Shots Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,14 +143,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4468933709914479537}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.45451948, y: -0.5416752, z: 0.5416752, w: 0.45451948}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4468933710022368859}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 100}
 --- !u!1 &4468933710022368860
 GameObject:
   m_ObjectHideFlags: 0

@@ -815,7 +815,7 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": 2.0,
-    "m_FloatType": 1,
+    "m_FloatType": 0,
     "m_RangeValues": {
         "x": -10.0,
         "y": 10.0
@@ -2916,7 +2916,7 @@
         "b": 0.0,
         "a": 0.6000000238418579
     },
-    "m_ColorMode": 0
+    "m_ColorMode": 1
 }
 
 {
