@@ -10,7 +10,7 @@ namespace GalaxyRush
 {
     public class Game : MonoBehaviour
     {
-        public Menu.Cursor cursor;
+        public UI.Cursor cursor;
         public Menu.Foreground foreground;
         public Menu.PauseMenu pause;
         public Menu.SettingsMenu settings;

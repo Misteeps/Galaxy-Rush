@@ -349,6 +349,95 @@ namespace GalaxyRush
             }
         }
         #endregion Group
+        #region Cursor
+        [Serializable]
+        public class Cursor : Group
+        {
+            public Image crosshair;
+            public Image dot;
+
+            public GameObject hovered;
+            public Vector3 targeted;
+
+
+            public override void Initialize()
+            {
+                group.alpha = 1;
+                EnableHitboxes(group, false);
+            }
+            public override void Update() { }
+
+            public void Move(Vector2 delta, Vector2 bounds)
+            {
+                float x = Mathf.Clamp(group.transform.localPosition.x + (delta.x * Settings.cursorSensitivity), -bounds.x, bounds.x);
+                float y = Mathf.Clamp(group.transform.localPosition.y + (delta.y * Settings.cursorSensitivity), -bounds.y, bounds.y);
+
+                group.transform.localPosition = new Vector3(x, y, 0);
+            }
+            public void Focus(bool focused)
+            {
+                if (focused)
+                {
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 2f, 2.4f, 0.2f, true);
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 2f, 2.4f, 0.2f, true);
+
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0f, 0.25f, 0.15f, true);
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0f, 0.25f, 0.15f, true);
+
+                    SetColor(Settings.cursorFocusedColor, 0.1f);
+                }
+                else
+                {
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 2.4f, 2f, 0.2f, true);
+                    Transition.Add(crosshair.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 2.4f, 2f, 0.2f, true);
+
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Exponential, EaseDirections.Out, 0.25f, 0f, 0.15f, true);
+                    Transition.Add(dot.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 0.25f, 0f, 0.15f, true);
+
+                    SetColor(Settings.cursorColor, 0.1f);
+                }
+            }
+
+            public void SetSize(float size) => group.transform.localScale = new Vector3(size, size, 1);
+            public void SetColor(Color? color = null, float speed = 0)
+            {
+                if (color == null) color = (hovered == null) ? Settings.cursorColor : Settings.cursorFocusedColor;
+
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.r, speed, true);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.g, speed, true);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.b, speed, true);
+                Transition.Add(crosshair.gameObject, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.a, speed, true);
+
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.R, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.r, speed, true);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.G, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.g, speed, true);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.B, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.b, speed, true);
+                Transition.Add(dot.gameObject, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, color.Value.a, speed, true);
+            }
+
+            public void GetHovered()
+            {
+                RaycastHit2D hit = Physics2D.Raycast(group.transform.position, Vector2.zero);
+                if (hit.collider?.gameObject == this.hovered) return;
+
+                this.hovered = hit.collider?.gameObject;
+                Focus(this.hovered != null);
+            }
+            public void GetTargeted()
+            {
+                Ray ray = new Ray(Global.player.cameraPosition.position, Global.player.cameraPosition.transform.TransformDirection(Vector3.forward));
+                if (Physics.Raycast(ray, out RaycastHit hit, 100, Global.player.shots.collidableLayers))
+                {
+                    targeted = hit.point;
+                    Focus(Global.player.shots.targetLayers == (Global.player.shots.targetLayers | (1 << hit.collider.gameObject.layer)));
+                }
+                else
+                {
+                    targeted = ray.GetPoint(100);
+                    Focus(false);
+                }
+            }
+        }
+        #endregion Cursor
 
         public static void ColorObject(GameObject gameObject, float? r = null, float? g = null, float? b = null, float? a = null) => ColorObject(gameObject.GetComponent<Image>(), r.Value, g.Value, b.Value, a.Value);
         public static void ColorObject(GameObject gameObject, Color color) => ColorObject(gameObject.GetComponent<Image>(), color);

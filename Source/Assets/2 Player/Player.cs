@@ -64,6 +64,8 @@ namespace GalaxyRush
 			public Transform position;
 			public int max = 7;
 			public float chargeTime = 5;
+			public LayerMask collidableLayers;
+			public LayerMask targetLayers;
 
 			[Header("Readonly")]
 			public Transform[] shots;
@@ -164,7 +166,6 @@ namespace GalaxyRush
 			controller.Move(new Vector3(0, y, z));
 
 
-			MoveShots();
 			if (shots.amount < shots.max)
 			{
 				shots.chargeTimer += Time.unscaledDeltaTime;
@@ -184,6 +185,7 @@ namespace GalaxyRush
 		public void LateUpdate()
 		{
 			TurnHead();
+			MoveShots();
 		}
 
 
@@ -321,6 +323,10 @@ namespace GalaxyRush
 
 				rightArm.Animate(Arm.aim, true);
 				leftArm.Animate(Arm.slowTime, true);
+
+				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
+				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
+				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Quartic, EaseDirections.Out, 0.8f, 1.2f, 1, true);
 			}
 			else
 			{
@@ -331,15 +337,30 @@ namespace GalaxyRush
 
 				rightArm.Animate(Arm.aim, false);
 				leftArm.Animate(Arm.slowTime, false);
+
+				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
+				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
+				Transition.Add(shots.position.gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Cubic, EaseDirections.Out, 1.2f, 0.8f, 0.3f, true);
 			}
 		}
 		public void Shoot()
 		{
-			Destroy(shots.shots[shots.current].gameObject, 0.25f);
+			GameObject shot = shots.shots[shots.current].gameObject;
 			shots.shots[shots.current] = null;
 
-			//shots.position.Rotate(Vector3.forward * -45, Space.Self);
-			//Transition.Add(shots.position.gameObject, TransitionComponents.Rotation, TransitionUnits.Z, EaseFunctions.Quintic, EaseDirections.InOut, shots.current * -45, (shots.current + 1) * -45, 1f, true);
+			Vector3 start = shot.transform.position;
+			Vector3 end = Global.game.cursor.targeted;
+			float time = Vector3.Distance(start, end) / 100;
+
+			Transition.Add(shot, TransitionComponents.Position, TransitionUnits.X, EaseFunctions.Linear, EaseDirections.InOut, start.x, end.x, time, true);
+			Transition.Add(shot, TransitionComponents.Position, TransitionUnits.Y, EaseFunctions.Linear, EaseDirections.InOut, start.y, end.y, time, true);
+			Transition.Add(shot, TransitionComponents.Position, TransitionUnits.Z, EaseFunctions.Linear, EaseDirections.InOut, start.z, end.z, time, true);
+
+			Transition.Add(shot, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Linear, EaseDirections.InOut, 1, 4, time, true);
+			Transition.Add(shot, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Linear, EaseDirections.InOut, 1, 4, time, true);
+			Transition.Add(shot, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Linear, EaseDirections.InOut, 1, 4, time, true);
+
+			Destroy(shot, time);
 
 			if (shots.current == 7) shots.current = 0;
 			else shots.current++;
@@ -358,8 +379,8 @@ namespace GalaxyRush
 					Transform shot = shots.shots[i];
 					Transform target = shots.position.GetChild(i);
 
-					shot.position = Vector3.Lerp(shot.position, target.position, Time.unscaledDeltaTime * 100);
-					shot.rotation = Quaternion.Slerp(shot.rotation, target.rotation, Time.unscaledDeltaTime * 25);
+                    shot.position = Vector3.Lerp(shot.position, target.position, 0.9f);
+                    shot.rotation = Quaternion.Slerp(shot.rotation, target.rotation, Time.unscaledDeltaTime * 25);
 				}
 		}
 		public void AddShot()

@@ -3781,7 +3781,7 @@ GameObject:
   - component: {fileID: 1222374224}
   - component: {fileID: 1222374223}
   - component: {fileID: 1222374226}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Target Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4383,6 +4383,18 @@ PrefabInstance:
     - target: {fileID: 4468933709914479537, guid: 298d16b256727f840b55eb2c79e345ed, type: 3}
       propertyPath: m_Name
       value: Shots Offset
+      objectReference: {fileID: 0}
+    - target: {fileID: 4468933710022368859, guid: 298d16b256727f840b55eb2c79e345ed, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4468933710022368859, guid: 298d16b256727f840b55eb2c79e345ed, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4468933710022368859, guid: 298d16b256727f840b55eb2c79e345ed, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 298d16b256727f840b55eb2c79e345ed, type: 3}
@@ -7801,6 +7813,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: LMAO.x
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: LMAO.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: LMAO.z
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: slow.max
       value: 100

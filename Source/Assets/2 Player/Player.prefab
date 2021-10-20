@@ -108,9 +108,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4a5893a54718d4d978f910d244265a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 8823702982601562742}
-  cameraPosition: {fileID: 8823702981431682636}
-  shots: {fileID: 0}
   head:
     softClamp: 25
     yaw: 0
@@ -140,17 +137,33 @@ MonoBehaviour:
     dashCooldown: 0
     doubleJump: 0
     armSwing: 0
-  powers:
-    maxShots: 6
-    shotChargeTime: 2
-    maxSlowTime: 10
-    aimed: 0
-    shots: 0
-    shotCharge: 0
-    slowTime: 0
+  shots:
+    prefab: {fileID: 0}
+    position: {fileID: 0}
+    max: 7
+    chargeTime: 5
+    collidableLayers:
+      serializedVersion: 2
+      m_Bits: 314368
+    targetLayers:
+      serializedVersion: 2
+      m_Bits: 3072
+    shots: []
+    amount: 0
+    current: 0
+    charging: 0
+    chargeTimer: 0
+  slow:
+    prefab: {fileID: 0}
+    position: {fileID: 0}
+    max: 10
+    amount: 0
+    active: 0
   rightArm:
     animator: {fileID: 0}
     mesh: {fileID: 0}
   leftArm:
     animator: {fileID: 0}
     mesh: {fileID: 0}
+  controller: {fileID: 8823702982601562742}
+  cameraPosition: {fileID: 8823702981431682636}
