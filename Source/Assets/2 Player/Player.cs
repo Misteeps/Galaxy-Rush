@@ -365,8 +365,8 @@ namespace GalaxyRush
 
 			TrailRenderer trail = shot.GetComponent<TrailRenderer>();
 			trail.enabled = true;
-			trail.startColor = Color.HSVToRGB(Mathf.InverseLerp(-1, 1, Mathf.Sin(Time.time)), 1, 1);
-			Transition.Add((v) => trail.time = slow.active ? time : 0.05f, EaseFunctions.Linear, EaseDirections.InOut, 0, 1, time);
+			trail.startColor = Color.HSVToRGB(Mathf.InverseLerp(-1, 1, Mathf.Sin(Time.unscaledTime * 0.5f)), 1, 1);
+			Transition.Add((v) => trail.time = slow.active ? time - v : Mathf.Lerp(trail.time, 0.05f, Time.unscaledDeltaTime * 10), EaseFunctions.Linear, EaseDirections.InOut, 0, time, time);
 
 			Destroy(shot, time + 0.1f);
 
