@@ -717,7 +717,7 @@ namespace GalaxyRush
                     if (hovered == resume || hovered == close) Hide();
                     else if (hovered == reset) { Hide(); }
                     else if (hovered == settings) { base.Hide(); active = false; Global.game.settings.Show(); }
-                    else if (hovered == quit) Global.loader.Load("Menu");
+                    else if (hovered == quit) { Hide(); Global.loader.Load("Menu"); }
             }
 
             public override void Show(float speed = 0.25F)

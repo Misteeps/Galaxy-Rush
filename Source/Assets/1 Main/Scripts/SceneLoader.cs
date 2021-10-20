@@ -15,7 +15,8 @@ namespace GalaxyRush
 
         public void Load(string scene)
         {
-            scene = "TestStage";
+            if (scene != "Menu")
+                scene = "TestStage";
 
             foreach (GameObject gameObject in SceneManager.GetActiveScene().GetRootGameObjects())
                 gameObject.SetActive(false);
