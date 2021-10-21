@@ -16,13 +16,18 @@ namespace GalaxyRush
         public Menu.SettingsMenu settings;
 
         public Transform bounds;
+        public Transform obsticlesGroup;
 
         public int level;
-        public float overheadStart;
+        public int overheadStart;
+        public int[] checkpoints;
 
+        [Header("Readonly")]
         public int shots;
         public int deaths;
         public float time;
+        public int checkpoint;
+        public Obsticle[][] obsticles;
 
         public bool settingsLocked;
 
@@ -53,6 +58,24 @@ namespace GalaxyRush
             foreground.Initialize();
             pause.Initialize();
             settings.Initialize();
+
+            List<List<Obsticle>> obsticlesList = new List<List<Obsticle>>(checkpoints.Length);
+            for (int i = 0; i < checkpoints.Length; i++)
+                obsticlesList.Add(new List<Obsticle>());
+
+            for (int i = 0; i < obsticlesGroup.childCount; i++)
+                if (obsticlesGroup.GetChild(i).TryGetComponent(out Obsticle obsticle))
+                {
+                    int checkpoint = CheckpointFromPosition(obsticle.transform.position.z);
+                    obsticlesList[checkpoint].Add(obsticle);
+                    obsticle.Enable(false);
+                }
+
+            obsticles = new Obsticle[checkpoints.Length][];
+            for (int i = 0; i < checkpoints.Length; i++)
+                obsticles[i] = obsticlesList[i].ToArray();
+
+            ActivateObsticles(0, true);
         }
         public void Update()
         {
@@ -83,6 +106,22 @@ namespace GalaxyRush
                 if (Input.escape.Down)
                     pause.Show();
             }
+        }
+
+        public void ActivateObsticles(int checkpoint, bool active)
+        {
+            foreach (Obsticle obsticle in obsticles[checkpoint])
+                obsticle.Enable(active);
+        }
+
+        public int CheckpointFromPosition(float position)
+        {
+            int checkpoint = 0;
+            for (int i = 0; i < checkpoints.Length; i++)
+                if (checkpoints[i] < position)
+                    checkpoint = i;
+
+            return checkpoint;
         }
     }
 }

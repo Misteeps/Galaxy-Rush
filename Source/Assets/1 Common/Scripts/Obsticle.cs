@@ -100,13 +100,11 @@ namespace GalaxyRush
         public float timer;
 
 
+        public void Enable(bool value) => enabled = value && steps.Length != 0;
         public virtual void Start()
         {
             foreach (Object obj in objects)
                 obj.GetDefaults();
-
-            if (steps.Length == 0)
-                enabled = false;
         }
         public virtual void Update()
         {
@@ -125,10 +123,10 @@ namespace GalaxyRush
             if (targetsHit == targets)
             {
                 Activate();
-                enabled = false;
+                Enable(false);
             }
-            else if (steps.Length != 0)
-                enabled = true;
+            else
+                Enable(true);
         }
         public virtual void Activate()
         {
