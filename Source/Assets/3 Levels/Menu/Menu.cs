@@ -294,9 +294,6 @@ namespace GalaxyRush
                 private bool secondaryEditable;
 
                 private int active;
-                //private Action onChange;
-                // UI.EnableHitboxes(!value);
-                // active = !value;
 
 
                 public void Initialize(Input.Trigger trigger, bool primaryEditable = true, bool secondaryEditable = true)
@@ -636,7 +633,7 @@ namespace GalaxyRush
 
                 if (Input.click.Down && hovered != null)
                     if (hovered == resume || hovered == close) Hide();
-                    else if (hovered == reset) { Hide(); }
+                    else if (hovered == reset) { Hide(); Global.player.Death(); }
                     else if (hovered == settings) { base.Hide(); active = false; Global.game.settings.Show(); }
                     else if (hovered == quit) { Hide(); Global.loader.Load("Menu"); }
             }

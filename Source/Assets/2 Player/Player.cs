@@ -43,7 +43,8 @@ namespace GalaxyRush
 			public bool grounded = true;
 			public float groundedHitboxOffset = -0.14f;
 			public float groundedHitboxRadius = 0.5f;
-			public LayerMask groundedHitboxLayers;
+			public LayerMask groundedLayers;
+			public LayerMask deathLayers;
 
 			[Header("Readonly")]
 			public float speed;
@@ -154,12 +155,44 @@ namespace GalaxyRush
 
 		public void Start()
 		{
+			ResetValues();
+
 			Arm.SetIDs();
 			movement.armSwing = 2;
 
 			shots.shots = new Transform[8];
-			for (int i = 0; i < 4; i++) AddShot();
+			for (int i = 0; i < 3; i++) AddShot();
 			slow.amount = slow.max;
+
+			for (int i = 0; i < 7; i++)
+				shots.ui.GetChild(i).GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, 0);
+		}
+		public void ResetValues()
+		{
+			head.yaw = 0;
+			head.pitch = 0;
+
+			movement.speed = 0;
+			movement.verticalVelocity = 0;
+			movement.lane = 0;
+			movement.strafeCooldown = 0;
+			movement.dash = false;
+			movement.dashCooldown = 0;
+			movement.doubleJump = false;
+			movement.armSwing = 0;
+
+			shots.shots = null;
+			shots.amount = 0;
+			shots.current = 0;
+			shots.charging = 0;
+			shots.chargeTimer = 0;
+
+			slow.mat = null;
+			slow.matColorID = 0;
+			slow.amount = 0;
+			slow.active = false;
+			slow.start = 0;
+			slow.timer = 0;
 		}
 
 		public void Update()
@@ -173,6 +206,9 @@ namespace GalaxyRush
 			float z = Run();
 			controller.Move(new Vector3(0, y, z));
 
+			if (transform.position.y <= -100)
+				Death();
+
 
 			if (shots.amount < shots.max)
 			{
@@ -185,16 +221,15 @@ namespace GalaxyRush
 			Aim(Input.aim.Held && slow.amount > 0 && slow.timer > slow.cooldown);
 			if (Input.shoot.Down && shots.amount > 0) Shoot();
 
+			MoveShots();
+
+
+			TurnHead();
 
 			movement.armSwing += movement.armSpeed * Time.unscaledDeltaTime;
 			if (movement.armSwing >= 1) movement.armSwing -= 1;
 			rightArm.Animate(Arm.run, movement.armSwing);
 			leftArm.Animate(Arm.run, movement.armSwing - 0.5f);
-		}
-		public void LateUpdate()
-		{
-			TurnHead();
-			MoveShots();
 		}
 
 
@@ -225,7 +260,7 @@ namespace GalaxyRush
 		public void CheckGround()
 		{
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - movement.groundedHitboxOffset, transform.position.z);
-			movement.grounded = Physics.CheckSphere(spherePosition, movement.groundedHitboxRadius, movement.groundedHitboxLayers, QueryTriggerInteraction.Ignore);
+			movement.grounded = Physics.CheckSphere(spherePosition, movement.groundedHitboxRadius, movement.groundedLayers, QueryTriggerInteraction.Ignore);
 		}
 		public float Run()
 		{
@@ -366,7 +401,7 @@ namespace GalaxyRush
 				slow.ui.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Lerp(0, 175, Mathf.InverseLerp(0, slow.max, slow.amount)));
 
 				if (start)
-                {
+				{
 					slow.timer = 0;
 
 					rightArm.Animate(Arm.aim, false);
@@ -433,8 +468,8 @@ namespace GalaxyRush
 					Transform shot = shots.shots[i];
 					Transform target = shots.position.GetChild(i);
 
-                    shot.position = Vector3.Lerp(shot.position, target.position, 0.9f);
-                    shot.rotation = Quaternion.Slerp(shot.rotation, target.rotation, Time.unscaledDeltaTime * 25);
+					shot.position = target.position;
+					shot.rotation = Quaternion.Slerp(shot.rotation, target.rotation, Time.unscaledDeltaTime * 25);
 				}
 		}
 		public void AddShot()
@@ -455,6 +490,8 @@ namespace GalaxyRush
 			ui.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, 0);
 			Transition.Add(ui, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, -10, 0, 0.1f, true);
 			Transition.Add(ui, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, 1, 0.1f, true);
+
+			Global.game.shots += 1;
 		}
 
 
@@ -471,6 +508,47 @@ namespace GalaxyRush
 			controller.enabled = false;
 			transform.position = position;
 			controller.enabled = true;
+		}
+
+
+		private void OnControllerColliderHit(ControllerColliderHit hit)
+		{
+			if (movement.deathLayers == (movement.deathLayers | 1 << hit.gameObject.layer))
+				Death();
+		}
+		public async void Death()
+		{
+			Aim(false);
+
+			gameObject.SetActive(false);
+			rightArm.animator.gameObject.SetActive(false);
+			leftArm.animator.gameObject.SetActive(false);
+
+			for (int i = 0; i < 8; i++)
+				if (shots.shots[i] != null)
+					Destroy(shots.shots[i].gameObject);
+
+			Transition.Add(cameraPosition.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 1.375f, 2.5f, 1);
+			Transition.Add(cameraPosition.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Z, EaseFunctions.Exponential, EaseDirections.Out, 0, -3f, 1);
+			Transition.Add((v) => cameraPosition.rotation = Quaternion.LookRotation(((transform.position + Vector3.up * 1.375f) - cameraPosition.position).normalized), EaseFunctions.Quadratic, EaseDirections.Out, 0, 1, 1);
+
+			Global.game.deaths += 1;
+
+			Global.game.foreground.Show(2);
+			await System.Threading.Tasks.Task.Delay(2400);
+			Global.game.foreground.Hide(1);
+
+			cameraPosition.localPosition = Vector3.up * 1.375f;
+			cameraPosition.localEulerAngles = Vector3.zero;
+
+			SetPosition(0, 0, 0); // Get checkpoint position
+			// Reset obsticles
+
+			gameObject.SetActive(true);
+			rightArm.animator.gameObject.SetActive(true);
+			leftArm.animator.gameObject.SetActive(true);
+
+			Start();
 		}
 	}
 }

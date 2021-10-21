@@ -18,7 +18,10 @@ namespace GalaxyRush
         public Transform bounds;
 
         public int level;
+        public float overheadStart;
+
         public int shots;
+        public int deaths;
         public float time;
 
         public bool settingsLocked;

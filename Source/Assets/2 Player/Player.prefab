@@ -126,9 +126,12 @@ MonoBehaviour:
     grounded: 1
     groundedHitboxOffset: -0.14
     groundedHitboxRadius: 0.5
-    groundedHitboxLayers:
+    groundedLayers:
       serializedVersion: 2
       m_Bits: 32768
+    deathLayers:
+      serializedVersion: 2
+      m_Bits: 281600
     speed: 0
     verticalVelocity: 0
     lane: 0
