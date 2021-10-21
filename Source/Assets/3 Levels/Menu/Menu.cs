@@ -17,27 +17,33 @@ namespace GalaxyRush
         [Serializable]
         public class Foreground : UI.Group
         {
-            public string sceneLoad;
+            public string load;
 
             public override void Initialize()
             {
                 group.alpha = 1;
                 UI.EnableHitboxes(group, true);
 
+                load = string.Empty;
+
                 Hide(1f);
             }
             public override void Update()
             {
-                if (string.IsNullOrEmpty(sceneLoad)) return;
+                if (string.IsNullOrEmpty(load)) return;
+                Debug.Log(load);
 
                 if (group.alpha >= 1)
-                    Global.loader.Load(sceneLoad);
+                    if (load == "Death")
+                        Global.player.Respawn();
+                    else
+                        Global.loader.Load(load);
 
-                if (Input.escape.Down)
+                if (Input.escape.Down && Global.menu != null)
                 {
                     Global.menu.main.Show();
 
-                    sceneLoad = string.Empty;
+                    load = string.Empty;
                     Hide();
                 }
             }
@@ -397,10 +403,8 @@ namespace GalaxyRush
                     Transition.Add(button, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Quartic, EaseDirections.Out, 0, 0.1f, 0.5f, true);
                 }
 
-                public async void LockSettings(bool locked)
+                public void LockSettings(bool locked)
                 {
-                    await System.Threading.Tasks.Task.Delay(1);
-
                     if (Global.menu != null)
                     {
                         UI.EnableHitboxes(Global.menu.settings.group, !locked);
@@ -749,7 +753,7 @@ namespace GalaxyRush
                     CloseSideMenus();
                     main.Hide(0.5f);
 
-                    foreground.sceneLoad = "TestStage";
+                    foreground.load = "TestStage";
                     foreground.Show(0.5f);
                 }
                 else if (cursor.hovered == main.chapters) { CloseSideMenus(); chapters.Show(); }

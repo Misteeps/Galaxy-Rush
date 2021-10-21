@@ -516,7 +516,7 @@ namespace GalaxyRush
 			if (movement.deathLayers == (movement.deathLayers | 1 << hit.gameObject.layer))
 				Death();
 		}
-		public async void Death()
+		public void Death()
 		{
 			Aim(false);
 
@@ -534,15 +534,19 @@ namespace GalaxyRush
 
 			Global.game.deaths += 1;
 
+			Global.game.foreground.load = "Death";
 			Global.game.foreground.Show(2);
-			await System.Threading.Tasks.Task.Delay(2400);
+		}
+		public void Respawn()
+		{
+			Global.game.foreground.load = string.Empty;
 			Global.game.foreground.Hide(1);
 
 			cameraPosition.localPosition = Vector3.up * 1.375f;
 			cameraPosition.localEulerAngles = Vector3.zero;
 
 			SetPosition(0, 0, Global.game.checkpointPosition); // Get checkpoint position
-			// Reset obsticles
+															   // Reset obsticles
 
 			gameObject.SetActive(true);
 			rightArm.animator.gameObject.SetActive(true);

@@ -83,6 +83,8 @@ namespace GalaxyRush
             Transition.IncrementObjects();
             Transition.IncrementTweens();
 
+            foreground.Update();
+
             if (pause.active || settings.active)
             {
                 Physics2D.Simulate(Time.unscaledDeltaTime);
