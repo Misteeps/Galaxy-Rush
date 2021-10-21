@@ -550,6 +550,7 @@ namespace GalaxyRush
 			Transition.Add((v) => cameraPosition.rotation = Quaternion.LookRotation(((transform.position + Vector3.up * 1.375f) - cameraPosition.position).normalized), EaseFunctions.Quadratic, EaseDirections.Out, 0, 1, 1);
 
 			Global.game.deaths += 1;
+			Global.game.streak = 1;
 
 			Global.game.foreground.load = "Death";
 			Global.game.foreground.Show(2);

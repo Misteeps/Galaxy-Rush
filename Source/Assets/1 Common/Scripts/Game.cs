@@ -29,6 +29,7 @@ namespace GalaxyRush
         public int deaths;
         public float time;
         public int checkpoint;
+        public int streak;
         public Vector3 checkpointPosition => checkpoints[checkpoint];
         public Obstacle[][] obstacles;
         public Target[][] targets;
@@ -64,6 +65,7 @@ namespace GalaxyRush
             pause.Initialize();
             settings.Initialize();
 
+            #region Get Objects
             T[][] GetObjects<T>(Transform group) where T : MonoBehaviour
             {
                 List<List<T>> list = new List<List<T>>(checkpoints.Length);
@@ -85,6 +87,9 @@ namespace GalaxyRush
 
                 return array;
             }
+            #endregion
+
+            streak = 1;
 
             obstacles = GetObjects<Obstacle>(obstaclesGroup);
             targets = GetObjects<Target>(targetsGroup);
@@ -166,6 +171,7 @@ namespace GalaxyRush
             ActivateStars(this.checkpoint, false);
 
             this.checkpoint = checkpoint;
+            this.streak++;
 
             ActivateObstacles(this.checkpoint, true);
             ActivateStars(this.checkpoint, true);

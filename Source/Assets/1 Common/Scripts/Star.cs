@@ -17,15 +17,16 @@ namespace GalaxyRush
             transform.Rotate(Vector3.up * Time.deltaTime * 50);
         }
 
-        public void Hit(bool value)
+        public void Hit()
         {
-
+            gameObject.SetActive(false);
+            // Add Score based on star size
         }
 
         public void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.tag == "Projectile")
-                Hit(true);
+                Hit();
         }
     }
 }
