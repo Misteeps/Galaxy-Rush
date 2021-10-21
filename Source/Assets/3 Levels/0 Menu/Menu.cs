@@ -31,7 +31,6 @@ namespace GalaxyRush
             public override void Update()
             {
                 if (string.IsNullOrEmpty(load)) return;
-                Debug.Log(load);
 
                 if (group.alpha >= 1)
                     if (load == "Death")

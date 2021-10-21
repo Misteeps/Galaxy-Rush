@@ -10,24 +10,34 @@ namespace GalaxyRush
     public class Target : MonoBehaviour
     {
         public Obstacle obstacle;
-        public bool hit;
         public float resetTime;
-        public float timer;
-
-        public new MeshRenderer renderer;
-        public MaterialPropertyBlock mat;
         public Color normalBase = new Color(0, 0, 0, 0.4f);
         public Color normalColor = new Color(1, 0, 0, 1);
         public Color hitBase = new Color(0, 0, 0, 0);
         public Color hitColor = new Color(0, 0, 0, 0);
 
+        [Header("Readonly")]
+        public bool hit;
+        public float timer;
 
-        public void Start()
+        public new MeshRenderer renderer;
+        public MaterialPropertyBlock mat;
+
+
+        public void Initialize()
         {
-            enabled = false;
             renderer = GetComponent<MeshRenderer>();
             mat = new MaterialPropertyBlock();
         }
+        public void ResetValues()
+        {
+            hit = false;
+            timer = 0;
+            SetColors(normalBase, normalColor);
+
+            enabled = false;
+        }
+
         public void Update()
         {
             timer += Time.deltaTime;

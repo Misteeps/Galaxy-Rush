@@ -94,6 +94,7 @@ namespace GalaxyRush
         public int activationStep;
         public TransitionAction[] activations;
 
+        [Header("Readonly")]
         public int targetsHit;
         public int currentStep;
         public int nextStep;
@@ -101,17 +102,27 @@ namespace GalaxyRush
 
 
         public void Enable(bool value) => enabled = value && steps.Length != 0;
-        public virtual void Start()
+        public virtual void Initialize()
         {
             foreach (Object obj in objects)
                 obj.GetDefaults();
+        }
+        public virtual void ResetValues()
+        {
+            targetsHit = 0;
+            currentStep = 0;
+            nextStep = 0;
+            timer = 0;
+
+            for (int i = 0; i < objects.Length; i++)
+                objects[i].Reset();
         }
         public virtual void Update()
         {
             timer += Time.deltaTime;
 
             if (timer >= steps[nextStep].time)
-                SetStep(nextStep);
+                SetStep(nextStep, true);
         }
 
         public void TargetHit(int value)
@@ -136,7 +147,7 @@ namespace GalaxyRush
                 action.Invoke(objects[action.obsticle].gameObject);
         }
 
-        public void SetStep(int step, bool invokeActions = true)
+        public void SetStep(int step, bool invokeActions)
         {
             currentStep = step;
             nextStep = (step + 1 == steps.Length) ? 0 : step + 1;

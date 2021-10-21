@@ -17,18 +17,22 @@ namespace GalaxyRush
 
         public Transform bounds;
         public Transform obstaclesGroup;
+        public Transform targetsGroup;
+        public Transform starsGroup;
 
         public int level;
         public int overheadStart;
-        public int[] checkpoints;
+        public Vector3[] checkpoints;
 
         [Header("Readonly")]
         public int shots;
         public int deaths;
         public float time;
         public int checkpoint;
-        public int checkpointPosition => checkpoints[checkpoint];
+        public Vector3 checkpointPosition => checkpoints[checkpoint];
         public Obstacle[][] obstacles;
+        public Target[][] targets;
+        public Star[][] stars;
 
         public bool settingsLocked;
 
@@ -60,23 +64,34 @@ namespace GalaxyRush
             pause.Initialize();
             settings.Initialize();
 
-            List<List<Obstacle>> obstaclesList = new List<List<Obstacle>>(checkpoints.Length);
-            for (int i = 0; i < checkpoints.Length; i++)
-                obstaclesList.Add(new List<Obstacle>());
+            T[][] GetObjects<T>(Transform group) where T : MonoBehaviour
+            {
+                List<List<T>> list = new List<List<T>>(checkpoints.Length);
+                for (int i = 0; i < checkpoints.Length; i++)
+                    list.Add(new List<T>());
 
-            for (int i = 0; i < obstaclesGroup.childCount; i++)
-                if (obstaclesGroup.GetChild(i).TryGetComponent(out Obstacle obsticle))
-                {
-                    int checkpoint = CheckpointFromPosition(obsticle.transform.position.z);
-                    obstaclesList[checkpoint].Add(obsticle);
-                    obsticle.Enable(false);
-                }
+                for (int i = 0; i < group.childCount; i++)
+                    if (group.GetChild(i).TryGetComponent(out T obj))
+                    {
+                        int checkpoint = CheckpointFromPosition(obj.transform.position.z);
+                        list[checkpoint].Add(obj);
+                        obj.enabled = false;
+                        obj.Invoke("Initialize", 0);
+                    }
 
-            obstacles = new Obstacle[checkpoints.Length][];
-            for (int i = 0; i < checkpoints.Length; i++)
-                obstacles[i] = obstaclesList[i].ToArray();
+                T[][] array = new T[checkpoints.Length][];
+                for (int i = 0; i < checkpoints.Length; i++)
+                    array[i] = list[i].ToArray();
 
-            ActivateObsticles(0, true);
+                return array;
+            }
+
+            obstacles = GetObjects<Obstacle>(obstaclesGroup);
+            targets = GetObjects<Target>(targetsGroup);
+            stars = GetObjects<Star>(starsGroup);
+
+            ActivateObstacles(0, true);
+            ActivateStars(0, true);
         }
         public void Update()
         {
@@ -116,23 +131,50 @@ namespace GalaxyRush
             }
         }
 
-        public void ActivateObsticles(int checkpoint, bool active)
+        public void ActivateObstacles(int checkpoint, bool active)
         {
             foreach (Obstacle obsticle in obstacles[checkpoint])
                 obsticle.Enable(active);
         }
+        public void ActivateTargets(int checkpoint, bool active)
+        {
+            foreach (Target target in targets[checkpoint])
+                target.enabled = active;
+        }
+        public void ActivateStars(int checkpoint, bool active)
+        {
+            foreach (Star star in stars[checkpoint])
+                star.enabled = active;
+        }
+
+        public void ResetObstacles()
+        {
+            for (int i = 0; i < obstacles.Length; i++)
+                foreach (Obstacle obstacle in obstacles[i])
+                    obstacle.ResetValues();
+        }
+        public void ResetTargets()
+        {
+            for (int i = 0; i < targets.Length; i++)
+                foreach (Target target in targets[i])
+                    target.ResetValues();
+        }
 
         public void SetCheckpoint(int checkpoint)
         {
-            ActivateObsticles(this.checkpoint, false);
-            ActivateObsticles(checkpoint, true);
+            ActivateObstacles(this.checkpoint, false);
+            ActivateStars(this.checkpoint, false);
+
             this.checkpoint = checkpoint;
+
+            ActivateObstacles(this.checkpoint, true);
+            ActivateStars(this.checkpoint, true);
         }
         public int CheckpointFromPosition(float position)
         {
             int checkpoint = 0;
             for (int i = 0; i < checkpoints.Length; i++)
-                if (checkpoints[i] < position)
+                if (checkpoints[i].z < position)
                     checkpoint = i;
 
             return checkpoint;

@@ -321,7 +321,9 @@ namespace GalaxyRush
 				}
 			}
 
-			movement.verticalVelocity += movement.gravity * Time.deltaTime;
+			float gravity = movement.gravity * Time.deltaTime;
+			if (slow.active) gravity /= 4;
+			movement.verticalVelocity += gravity;
 			return movement.verticalVelocity * Time.deltaTime;
 		}
 
@@ -545,8 +547,9 @@ namespace GalaxyRush
 			cameraPosition.localPosition = Vector3.up * 1.375f;
 			cameraPosition.localEulerAngles = Vector3.zero;
 
-			SetPosition(0, 0, Global.game.checkpointPosition); // Get checkpoint position
-															   // Reset obsticles
+			SetPosition(Global.game.checkpointPosition);
+			Global.game.ResetObstacles();
+			Global.game.ResetTargets();
 
 			gameObject.SetActive(true);
 			rightArm.animator.gameObject.SetActive(true);
