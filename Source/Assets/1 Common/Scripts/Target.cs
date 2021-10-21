@@ -9,7 +9,7 @@ namespace GalaxyRush
 {
     public class Target : MonoBehaviour
     {
-        public Obsticle obsticle;
+        public Obstacle obstacle;
         public bool hit;
         public float resetTime;
         public float timer;
@@ -42,7 +42,7 @@ namespace GalaxyRush
 
             if (value)
             {
-                obsticle.TargetHit(1);
+                obstacle.TargetHit(1);
                 SetColors(hitBase, hitColor);
                 timer = 0;
 
@@ -51,7 +51,7 @@ namespace GalaxyRush
             }
             else
             {
-                obsticle.TargetHit(-1);
+                obstacle.TargetHit(-1);
                 SetColors(normalBase, normalColor);
                 timer = 0;
 

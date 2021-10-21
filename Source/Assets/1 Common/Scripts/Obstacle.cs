@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GalaxyRush
 {
-    public class Obsticle : MonoBehaviour
+    public class Obstacle : MonoBehaviour
     {
         #region Object
         [Serializable]

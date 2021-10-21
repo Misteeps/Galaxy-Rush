@@ -724,13 +724,14 @@ MonoBehaviour:
     close: {fileID: 1711319022}
     active: 0
   bounds: {fileID: 1400604877}
-  obsticlesGroup: {fileID: 282718052}
+  obstaclesGroup: {fileID: 0}
   level: 1
   overheadStart: 10
   checkpoints: 00000000c8000000
   shots: 0
   deaths: 0
   time: 0
+  checkpoint: 0
   settingsLocked: 0
 --- !u!4 &154571579
 Transform:
@@ -1182,7 +1183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 282718052}
   m_Layer: 0
-  m_Name: Obsticles
+  m_Name: Obstacles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4284,7 +4285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80cc29b7118798e4bb59187732a57455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obsticle: {fileID: 1915685112}
+  obstacle: {fileID: 0}
   hit: 0
   resetTime: 2
   timer: 0
@@ -7255,7 +7256,7 @@ GameObject:
   - component: {fileID: 1915685111}
   - component: {fileID: 1915685112}
   m_Layer: 0
-  m_Name: Obsticle Laser
+  m_Name: Obstacle Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7501,7 +7502,7 @@ GameObject:
   - component: {fileID: 1977119942}
   - component: {fileID: 1977119943}
   m_Layer: 0
-  m_Name: Obsticle Door
+  m_Name: Obstacle Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -16,7 +16,7 @@ namespace GalaxyRush
         public Menu.SettingsMenu settings;
 
         public Transform bounds;
-        public Transform obsticlesGroup;
+        public Transform obstaclesGroup;
 
         public int level;
         public int overheadStart;
@@ -27,7 +27,7 @@ namespace GalaxyRush
         public int deaths;
         public float time;
         public int checkpoint;
-        public Obsticle[][] obsticles;
+        public Obstacle[][] obstacles;
 
         public bool settingsLocked;
 
@@ -59,21 +59,21 @@ namespace GalaxyRush
             pause.Initialize();
             settings.Initialize();
 
-            List<List<Obsticle>> obsticlesList = new List<List<Obsticle>>(checkpoints.Length);
+            List<List<Obstacle>> obstaclesList = new List<List<Obstacle>>(checkpoints.Length);
             for (int i = 0; i < checkpoints.Length; i++)
-                obsticlesList.Add(new List<Obsticle>());
+                obstaclesList.Add(new List<Obstacle>());
 
-            for (int i = 0; i < obsticlesGroup.childCount; i++)
-                if (obsticlesGroup.GetChild(i).TryGetComponent(out Obsticle obsticle))
+            for (int i = 0; i < obstaclesGroup.childCount; i++)
+                if (obstaclesGroup.GetChild(i).TryGetComponent(out Obstacle obsticle))
                 {
                     int checkpoint = CheckpointFromPosition(obsticle.transform.position.z);
-                    obsticlesList[checkpoint].Add(obsticle);
+                    obstaclesList[checkpoint].Add(obsticle);
                     obsticle.Enable(false);
                 }
 
-            obsticles = new Obsticle[checkpoints.Length][];
+            obstacles = new Obstacle[checkpoints.Length][];
             for (int i = 0; i < checkpoints.Length; i++)
-                obsticles[i] = obsticlesList[i].ToArray();
+                obstacles[i] = obstaclesList[i].ToArray();
 
             ActivateObsticles(0, true);
         }
@@ -110,7 +110,7 @@ namespace GalaxyRush
 
         public void ActivateObsticles(int checkpoint, bool active)
         {
-            foreach (Obsticle obsticle in obsticles[checkpoint])
+            foreach (Obstacle obsticle in obstacles[checkpoint])
                 obsticle.Enable(active);
         }
 
