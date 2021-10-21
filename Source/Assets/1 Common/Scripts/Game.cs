@@ -27,6 +27,7 @@ namespace GalaxyRush
         public int deaths;
         public float time;
         public int checkpoint;
+        public int checkpointPosition => checkpoints[checkpoint];
         public Obstacle[][] obstacles;
 
         public bool settingsLocked;
@@ -101,7 +102,12 @@ namespace GalaxyRush
             }
             else
             {
+                time += Time.unscaledDeltaTime;
                 cursor.GetTargeted();
+
+                int newCheckpoint = CheckpointFromPosition(Global.player.transform.position.z);
+                if (newCheckpoint != checkpoint)
+                    SetCheckpoint(newCheckpoint);
 
                 if (Input.escape.Down)
                     pause.Show();
@@ -114,6 +120,12 @@ namespace GalaxyRush
                 obsticle.Enable(active);
         }
 
+        public void SetCheckpoint(int checkpoint)
+        {
+            ActivateObsticles(this.checkpoint, false);
+            ActivateObsticles(checkpoint, true);
+            this.checkpoint = checkpoint;
+        }
         public int CheckpointFromPosition(float position)
         {
             int checkpoint = 0;

@@ -455,6 +455,8 @@ namespace GalaxyRush
 			else shots.current++;
 			shots.amount--;
 
+			Global.game.shots += 1;
+
 			rightArm.Animate(Arm.shoot);
 		}
 
@@ -490,8 +492,6 @@ namespace GalaxyRush
 			ui.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, 0);
 			Transition.Add(ui, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, -10, 0, 0.1f, true);
 			Transition.Add(ui, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, 1, 0.1f, true);
-
-			Global.game.shots += 1;
 		}
 
 
@@ -541,7 +541,7 @@ namespace GalaxyRush
 			cameraPosition.localPosition = Vector3.up * 1.375f;
 			cameraPosition.localEulerAngles = Vector3.zero;
 
-			SetPosition(0, 0, 0); // Get checkpoint position
+			SetPosition(0, 0, Global.game.checkpointPosition); // Get checkpoint position
 			// Reset obsticles
 
 			gameObject.SetActive(true);

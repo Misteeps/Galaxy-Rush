@@ -724,7 +724,7 @@ MonoBehaviour:
     close: {fileID: 1711319022}
     active: 0
   bounds: {fileID: 1400604877}
-  obstaclesGroup: {fileID: 0}
+  obstaclesGroup: {fileID: 282718052}
   level: 1
   overheadStart: 10
   checkpoints: 00000000c8000000
@@ -4285,7 +4285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80cc29b7118798e4bb59187732a57455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacle: {fileID: 0}
+  obstacle: {fileID: 1915685112}
   hit: 0
   resetTime: 2
   timer: 0
