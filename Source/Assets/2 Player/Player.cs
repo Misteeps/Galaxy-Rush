@@ -40,7 +40,7 @@ namespace GalaxyRush
 			public float gravity = -20;
 
 			[Space(4)]
-			public bool grounded = true;
+			public float coyoteTime;
 			public float groundedHitboxOffset = -0.14f;
 			public float groundedHitboxRadius = 0.5f;
 			public LayerMask groundedLayers;
@@ -54,6 +54,8 @@ namespace GalaxyRush
 			public bool dash;
 			public float dashCooldown;
 			public bool doubleJump;
+			public float coyoteTimer;
+			public bool grounded = true;
 			public float armSwing;
 		}
 		#endregion Movement
@@ -260,7 +262,18 @@ namespace GalaxyRush
 		public void CheckGround()
 		{
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - movement.groundedHitboxOffset, transform.position.z);
-			movement.grounded = Physics.CheckSphere(spherePosition, movement.groundedHitboxRadius, movement.groundedLayers, QueryTriggerInteraction.Ignore);
+			bool grounded = Physics.CheckSphere(spherePosition, movement.groundedHitboxRadius, movement.groundedLayers, QueryTriggerInteraction.Ignore);
+
+			if (grounded)
+            {
+				movement.coyoteTimer = 0;
+				movement.grounded = true;
+            }
+			else
+            {
+				movement.coyoteTimer += Time.deltaTime;
+				movement.grounded = movement.coyoteTimer <= movement.coyoteTime;
+            }
 		}
 		public float Run()
 		{

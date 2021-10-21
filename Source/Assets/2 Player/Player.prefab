@@ -123,7 +123,7 @@ MonoBehaviour:
     jumpHeight: 2.4
     doubleJumpHeight: 3.2
     gravity: -20
-    grounded: 1
+    coyoteTime: 0.1
     groundedHitboxOffset: -0.14
     groundedHitboxRadius: 0.5
     groundedLayers:
@@ -139,6 +139,8 @@ MonoBehaviour:
     dash: 0
     dashCooldown: 0
     doubleJump: 0
+    coyoteTimer: 0
+    grounded: 1
     armSwing: 0
   shots:
     prefab: {fileID: 0}
