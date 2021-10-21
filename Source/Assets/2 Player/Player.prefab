@@ -140,6 +140,7 @@ MonoBehaviour:
   shots:
     prefab: {fileID: 0}
     position: {fileID: 0}
+    ui: {fileID: 0}
     max: 7
     chargeTime: 5
     collidableLayers:
@@ -154,11 +155,19 @@ MonoBehaviour:
     charging: 0
     chargeTimer: 0
   slow:
-    prefab: {fileID: 0}
+    sphere: {fileID: 0}
+    clock: {fileID: 0}
+    clockRenderer: {fileID: 0}
+    star: {fileID: 0}
     position: {fileID: 0}
-    max: 10
+    ui: {fileID: 0}
+    max: 5
+    cooldown: 0.5
+    matColorID: 0
     amount: 0
     active: 0
+    start: 0
+    timer: 0
   rightArm:
     animator: {fileID: 0}
     mesh: {fileID: 0}

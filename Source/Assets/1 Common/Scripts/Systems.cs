@@ -196,7 +196,7 @@ namespace GalaxyRush
             bloom = value;
 
             Global.camera.GetComponent<Volume>().profile.TryGet(out Bloom component);
-            component.intensity.value = (Global.menu != null) ? value / 2 : value;
+            component.intensity.value = value;
         }
         public static void ChromaticAberration(float value)
         {

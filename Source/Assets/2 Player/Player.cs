@@ -86,8 +86,8 @@ namespace GalaxyRush
 			public Transform star;
 			public Transform position;
 			public RectTransform ui;
-			public float max = 10;
-			public float cooldown = 2;
+			public float max = 5;
+			public float cooldown = 0.5f;
 
 			[Header("Readonly")]
 			public MaterialPropertyBlock mat;

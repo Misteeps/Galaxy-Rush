@@ -90,10 +90,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Ambient_Occlusion: 10
+    - Ambient_Occlusion: 20
     - Metallic: 0.5
     - RGB: 0.15
-    - Smoothness: 0.9
+    - Smoothness: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1

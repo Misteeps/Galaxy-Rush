@@ -658,7 +658,7 @@ MonoBehaviour:
     targeted: {x: 0, y: 0, z: 0}
   foreground:
     group: {fileID: 1548384041}
-    targetLevel: 0
+    sceneLoad: 
   pause:
     group: {fileID: 260823202}
     resume: {fileID: 708010904}
@@ -8772,10 +8772,6 @@ PrefabInstance:
       propertyPath: rightArm.mesh
       value: 
       objectReference: {fileID: 1992704710837416461}
-    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
-      propertyPath: slow.cooldown
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: slow.position
       value: 

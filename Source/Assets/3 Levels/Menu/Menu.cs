@@ -17,7 +17,7 @@ namespace GalaxyRush
         [Serializable]
         public class Foreground : UI.Group
         {
-            public int targetLevel;
+            public string sceneLoad;
 
             public override void Initialize()
             {
@@ -28,16 +28,16 @@ namespace GalaxyRush
             }
             public override void Update()
             {
-                if (targetLevel == 0) return;
+                if (string.IsNullOrEmpty(sceneLoad)) return;
 
                 if (group.alpha >= 1)
-                    Global.loader.Load($"Level {targetLevel}");
+                    Global.loader.Load(sceneLoad);
 
                 if (Input.escape.Down)
                 {
                     Global.menu.main.Show();
 
-                    targetLevel = 0;
+                    sceneLoad = string.Empty;
                     Hide();
                 }
             }
@@ -752,7 +752,7 @@ namespace GalaxyRush
                     CloseSideMenus();
                     main.Hide(0.5f);
 
-                    foreground.targetLevel = 1;
+                    foreground.sceneLoad = "TestStage";
                     foreground.Show(0.5f);
                 }
                 else if (cursor.hovered == main.chapters) { CloseSideMenus(); chapters.Show(); }

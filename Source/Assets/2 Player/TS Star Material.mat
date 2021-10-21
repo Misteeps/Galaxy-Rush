@@ -77,7 +77,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Ambient_Occlusion: 100
+    - Ambient_Occlusion: 0
     - Metallic: 0
     - RGB: 0.15
     - Smoothness: 1
@@ -108,7 +108,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Base: {r: 1, g: 1, b: 1, a: 1}
+    - Base: {r: 23.968628, g: 23.968628, b: 23.968628, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
