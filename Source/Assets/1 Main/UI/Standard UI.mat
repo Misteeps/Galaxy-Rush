@@ -56,6 +56,6 @@ Material:
     m_Floats: []
     m_Colors:
     - InnerColor: {r: 1, g: 1, b: 1, a: 0.5019608}
-    - OuterColor: {r: 1, g: 1, b: 1, a: 1}
+    - OuterColor: {r: 1.4980392, g: 1.4980392, b: 1.4980392, a: 1}
     - _Color: {r: 2, g: 2, b: 2, a: 1}
   m_BuildTextureStacks: []

@@ -62,6 +62,7 @@ namespace GalaxyRush
 		{
 			public GameObject prefab;
 			public Transform position;
+			public RectTransform ui;
 			public int max = 7;
 			public float chargeTime = 5;
 			public LayerMask collidableLayers;
@@ -84,6 +85,7 @@ namespace GalaxyRush
 			public MeshRenderer clockRenderer;
 			public Transform star;
 			public Transform position;
+			public RectTransform ui;
 			public float max = 10;
 			public float cooldown = 2;
 
@@ -158,8 +160,6 @@ namespace GalaxyRush
 			shots.shots = new Transform[8];
 			for (int i = 0; i < 4; i++) AddShot();
 			slow.amount = slow.max;
-
-			Global.player = this;
 		}
 
 		public void Update()
@@ -330,6 +330,7 @@ namespace GalaxyRush
 				Time.timeScale = 0.2f;
 				slow.active = true;
 				slow.amount -= Time.unscaledDeltaTime;
+				slow.ui.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Lerp(0, 175, Mathf.InverseLerp(0, slow.max, slow.amount)));
 
 				if (start)
 				{
@@ -362,6 +363,7 @@ namespace GalaxyRush
 				Time.timeScale = 1;
 				slow.active = false;
 				slow.amount = Mathf.Clamp(slow.amount + Time.unscaledDeltaTime, 0, slow.max);
+				slow.ui.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Lerp(0, 175, Mathf.InverseLerp(0, slow.max, slow.amount)));
 
 				if (start)
                 {
@@ -403,10 +405,16 @@ namespace GalaxyRush
 			shot.GetComponent<Collider>().enabled = true;
 			TrailRenderer trail = shot.GetComponent<TrailRenderer>();
 			trail.enabled = true;
-			trail.startColor = Color.HSVToRGB(Mathf.InverseLerp(-1, 1, Mathf.Sin(Time.unscaledTime * 0.5f)), 1, 1);
+			trail.startColor = Color.HSVToRGB(Mathf.InverseLerp(-1, 1, Mathf.Sin(Time.unscaledTime)), 1, 1);
 			Transition.Add((v) => trail.time = slow.active ? time - v : Mathf.Lerp(trail.time, 0.05f, Time.unscaledDeltaTime * 10), EaseFunctions.Linear, EaseDirections.InOut, 0, time, time);
 
 			Destroy(shot, time + 0.1f);
+
+			GameObject ui = shots.ui.GetChild(shots.amount - 1).gameObject;
+			ui.transform.localPosition = new Vector3(ui.transform.localPosition.x, 0, 0);
+			ui.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, 1);
+			Transition.Add(ui, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, 0, 10, 0.1f, true);
+			Transition.Add(ui, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 1, 0, 0.1f, true);
 
 			if (shots.current == 7) shots.current = 0;
 			else shots.current++;
@@ -441,6 +449,12 @@ namespace GalaxyRush
 			else shots.charging++;
 			shots.amount++;
 			shots.chargeTimer = 0;
+
+			GameObject ui = shots.ui.GetChild(shots.amount - 1).gameObject;
+			ui.transform.localPosition = new Vector3(ui.transform.localPosition.x, -10, 0);
+			ui.GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, 0);
+			Transition.Add(ui, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, -10, 0, 0.1f, true);
+			Transition.Add(ui, TransitionComponents.UIColor, TransitionUnits.A, EaseFunctions.Linear, EaseDirections.InOut, 0, 1, 0.1f, true);
 		}
 
 
