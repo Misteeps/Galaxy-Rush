@@ -752,7 +752,7 @@ namespace GalaxyRush
                     CloseSideMenus();
                     main.Hide(0.5f);
 
-                    foreground.load = "TestStage";
+                    foreground.load = "Tutorial";
                     foreground.Show(0.5f);
                 }
                 else if (cursor.hovered == main.chapters) { CloseSideMenus(); chapters.Show(); }

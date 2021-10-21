@@ -123,7 +123,7 @@ namespace GalaxyRush
                 cursor.GetTargeted();
 
                 int newCheckpoint = CheckpointFromPosition(Global.player.transform.position.z);
-                if (newCheckpoint != checkpoint)
+                if (newCheckpoint != checkpoint && Global.player.transform.position.y > checkpoints[newCheckpoint].y - 1)
                     SetCheckpoint(newCheckpoint);
 
                 if (Input.escape.Down)

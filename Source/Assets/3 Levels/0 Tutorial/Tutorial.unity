@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 76ec9a3571fd9e24180593defdec9d5c, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -3792,7 +3792,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6319353081521216695, guid: 9ff95dd007a9d71459a938c5f9ffc8d3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6319353081521216695, guid: 9ff95dd007a9d71459a938c5f9ffc8d3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6449,8 +6449,9 @@ MonoBehaviour:
   level: 1
   overheadStart: 10
   checkpoints:
-  - {x: 0, y: 0, z: 1}
-  - {x: -0, y: 0, z: 180}
+  - {x: 0, y: 0, z: 0}
+  - {x: -0, y: 0, z: 175}
+  - {x: -12, y: -45, z: 475}
   shots: 0
   deaths: 0
   time: 0
@@ -7709,7 +7710,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562745, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562745, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: m_LocalRotation.w

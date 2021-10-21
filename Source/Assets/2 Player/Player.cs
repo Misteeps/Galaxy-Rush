@@ -159,7 +159,7 @@ namespace GalaxyRush
 		{
 			ResetValues();
 
-			Arm.SetIDs();
+			movement.lane = Mathf.RoundToInt(transform.position.x / movement.strafeDistance);
 			movement.armSwing = 2;
 
 			shots.shots = new Transform[8];
@@ -168,6 +168,8 @@ namespace GalaxyRush
 
 			for (int i = 0; i < 7; i++)
 				shots.ui.GetChild(i).GetComponent<UnityEngine.UI.Image>().color = new Color(1, 1, 1, 0);
+
+			Arm.SetIDs();
 		}
 		public void ResetValues()
 		{
@@ -265,15 +267,15 @@ namespace GalaxyRush
 			bool grounded = Physics.CheckSphere(spherePosition, movement.groundedHitboxRadius, movement.groundedLayers, QueryTriggerInteraction.Ignore);
 
 			if (grounded)
-            {
+			{
 				movement.coyoteTimer = 0;
 				movement.grounded = true;
-            }
+			}
 			else
-            {
+			{
 				movement.coyoteTimer += Time.deltaTime;
 				movement.grounded = movement.coyoteTimer <= movement.coyoteTime;
-            }
+			}
 		}
 		public float Run()
 		{
