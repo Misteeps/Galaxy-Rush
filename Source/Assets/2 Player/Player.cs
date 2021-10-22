@@ -59,6 +59,7 @@ namespace GalaxyRush
 			public bool grounded = true;
 			public float jumpPadTimer;
 			public float armSwing;
+			public Transition.Tween strafe;
 		}
 		#endregion Movement
 		#region Shots
@@ -260,7 +261,7 @@ namespace GalaxyRush
 				}
 
 				movement.strafeCooldown = 0;
-				Transition.Add(v => SetPosition(v, null, null), EaseFunctions.Cubic, EaseDirections.Out, movement.lane * movement.strafeDistance, lane * movement.strafeDistance, movement.strafeTime);
+				movement.strafe = Transition.Add(v => SetPosition(v, null, null), EaseFunctions.Cubic, EaseDirections.Out, movement.lane * movement.strafeDistance, lane * movement.strafeDistance, movement.strafeTime);
 				movement.lane = lane;
 			}
 		}
@@ -528,6 +529,12 @@ namespace GalaxyRush
 			controller.enabled = false;
 			transform.position = position;
 			controller.enabled = true;
+
+			if (Physics.CheckCapsule(transform.position, transform.position + new Vector3(0, 1.8f, 0), 0.4f, movement.deathLayers))
+            {
+				movement.strafe.Stop();
+				Death();
+            }
 		}
 
 
@@ -536,14 +543,14 @@ namespace GalaxyRush
 			if (movement.deathLayers == (movement.deathLayers | 1 << hit.gameObject.layer))
 				Death();
 			else if (movement.jumpPadLayers == (movement.jumpPadLayers | 1 << hit.gameObject.layer) && movement.jumpPadTimer >= 1)
-            {
+			{
 				movement.jumpPadTimer = 0;
 				Transition.Add((v) => movement.verticalVelocity = v, EaseFunctions.Linear, EaseDirections.InOut, 100, 0, 1);
-            }
+			}
 		}
 		public void Death()
 		{
-			if (Global.game.foreground.load == "Clear") return;
+			if (Global.game.results.active) return;
 
 			Aim(false);
 
@@ -560,7 +567,7 @@ namespace GalaxyRush
 			Transition.Add((v) => cameraPosition.rotation = Quaternion.LookRotation(((transform.position + Vector3.up * 1.375f) - cameraPosition.position).normalized), EaseFunctions.Quadratic, EaseDirections.Out, 0, 1, 1);
 
 			Global.game.deaths += 1;
-			Global.game.streak = 1;
+			Global.game.multiplier = Mathf.Clamp(Global.game.multiplier - 1, 0, int.MaxValue);
 
 			Global.game.foreground.load = "Death";
 			Global.game.foreground.Show(2);
@@ -569,6 +576,8 @@ namespace GalaxyRush
 		{
 			Global.game.foreground.load = string.Empty;
 			Global.game.foreground.Hide(1);
+
+			Global.game.uiMultiplier.text = $"<size=9>x</size>{Global.game.multiplier}";
 
 			cameraPosition.localPosition = Vector3.up * 1.375f;
 			cameraPosition.localEulerAngles = Vector3.zero;

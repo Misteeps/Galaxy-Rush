@@ -14,6 +14,7 @@ namespace GalaxyRush
         public Menu.Foreground foreground;
         public Menu.PauseMenu pause;
         public Menu.SettingsMenu settings;
+        public Menu.ResultsMenu results;
 
         public Transform bounds;
         public Transform[] planets;
@@ -21,16 +22,22 @@ namespace GalaxyRush
         public Transform targetsGroup;
         public Transform starsGroup;
 
+        public TMPro.TextMeshProUGUI uiTime;
+        public TMPro.TextMeshProUGUI uiScore;
+        public TMPro.TextMeshProUGUI uiMultiplier;
+        public TMPro.TextMeshProUGUI uiAddScore;
+
         public int level;
-        public int overheadStart;
+        public float expectedTime;
         public Vector3[] checkpoints;
 
         [Header("Readonly")]
-        public int shots;
-        public int deaths;
         public float time;
+        public int deaths;
+        public int shots;
         public int checkpoint;
-        public int streak;
+        public int multiplier;
+        public int score;
         public Vector3 checkpointPosition => checkpoints[checkpoint];
         public Obstacle[][] obstacles;
         public Target[][] targets;
@@ -90,7 +97,7 @@ namespace GalaxyRush
             }
             #endregion
 
-            streak = 1;
+            multiplier = 1;
 
             obstacles = GetObjects<Obstacle>(obstaclesGroup);
             targets = GetObjects<Target>(targetsGroup);
@@ -109,7 +116,14 @@ namespace GalaxyRush
 
             foreground.Update();
 
-            if (pause.active || settings.active)
+            if (results.active)
+            {
+                cursor.Move(Input.mouseDelta, bounds.localPosition);
+                cursor.GetHovered();
+
+                results.Update();
+            }
+            else if (pause.active || settings.active)
             {
                 Physics2D.Simulate(Time.unscaledDeltaTime);
 
@@ -128,11 +142,14 @@ namespace GalaxyRush
             }
             else
             {
-                time += Time.unscaledDeltaTime;
+                this.time += Time.unscaledDeltaTime;
+                TimeSpan time = TimeSpan.FromSeconds(this.time);
+                uiTime.text = $"{time:mm\\:ss}";
+
                 cursor.GetTargeted();
 
                 int newCheckpoint = CheckpointFromPosition(Global.player.transform.position.z);
-                if (newCheckpoint != checkpoint && Global.player.transform.position.y > checkpoints[newCheckpoint].y - 1)
+                if (newCheckpoint > checkpoint && Global.player.transform.position.y > checkpoints[newCheckpoint].y - 1)
                     SetCheckpoint(newCheckpoint);
 
                 if (Input.escape.Down)
@@ -174,16 +191,23 @@ namespace GalaxyRush
             ActivateObstacles(this.checkpoint, false);
             ActivateStars(this.checkpoint, false);
 
+            AddScore(1000, "Reached Checkpoint");
+
             this.checkpoint = checkpoint;
-            this.streak++;
+            this.multiplier++;
+
+            uiMultiplier.text = $"<size=9>x</size>{multiplier}";
 
             ActivateObstacles(this.checkpoint, true);
             ActivateStars(this.checkpoint, true);
 
             if (checkpoint == checkpoints.Length - 1)
             {
-                Global.game.foreground.load = "Clear";
-                foreground.Show(1);
+                multiplier = 1;
+                AddScore(Mathf.RoundToInt(Mathf.Lerp(checkpoints.Length * 1500, 0, Mathf.InverseLerp(0, expectedTime, Global.game.time))), "Time Bonus");
+
+                results.nextLevel = level + 1;
+                results.Show();
             }
         }
         public int CheckpointFromPosition(float position)
@@ -194,6 +218,22 @@ namespace GalaxyRush
                     checkpoint = i;
 
             return checkpoint;
+        }
+
+        public void AddScore(int amount, string reason)
+        {
+            score += amount * multiplier;
+
+            uiAddScore.alpha = 1;
+            uiAddScore.rectTransform.anchoredPosition = new Vector2(-50, -60);
+            uiAddScore.text = $"+{amount}\n<size=9>{reason}</size>";
+
+            Transition.Add((v) =>
+            {
+                uiAddScore.rectTransform.anchoredPosition = new Vector2(-50, Mathf.Lerp(-60, -40, v));
+                uiAddScore.alpha = Mathf.Lerp(1, 0, v);
+                if (v > 0.9f) uiScore.text = $"{score}";
+            }, EaseFunctions.Exponential, EaseDirections.In, 0, 1, 2);
         }
     }
 }

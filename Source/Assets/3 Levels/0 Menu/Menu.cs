@@ -35,8 +35,6 @@ namespace GalaxyRush
                 if (group.alpha >= 1)
                     if (load == "Death")
                         Global.player.Respawn();
-                    else if (load == "Clear")
-                        Debug.Log("Level Cleared");
                     else
                         Global.loader.Load(load);
 
@@ -679,6 +677,42 @@ namespace GalaxyRush
             }
         }
         #endregion Pause
+        #region Results
+        [Serializable]
+        public class ResultsMenu : UI.Group
+        {
+            public GameObject next;
+            public GameObject quit;
+
+            public TMPro.TextMeshProUGUI stats;
+            public TMPro.TextMeshProUGUI score;
+
+            public int nextLevel;
+            public bool active;
+
+            public override void Update()
+            {
+                if (!active) return;
+                GameObject hovered = Global.game.cursor.hovered;
+
+                if (Input.click.Down && hovered != null)
+                    if (hovered == next) Global.loader.Load(Global.LevelName(nextLevel));
+                    else if (hovered == quit) Global.loader.Load("Menu");
+            }
+
+            public override void Show(float speed = 0.25F)
+            {
+                base.Show(speed);
+
+                active = true;
+                Time.timeScale = 1;
+
+                TimeSpan time = TimeSpan.FromSeconds(Global.game.time);
+                stats.text = $"Time - {time:mm\\:ss}\nDeaths - {Global.game.deaths}\nShots - {Global.game.shots}";
+                score.text = $"Score:\n{Global.game.score}";
+            }
+        }
+        #endregion Results
 
 
         public UI.Cursor cursor;
@@ -754,7 +788,7 @@ namespace GalaxyRush
                     CloseSideMenus();
                     main.Hide(0.5f);
 
-                    foreground.load = "Tutorial";
+                    foreground.load = Global.GetUnplayedLevel();
                     foreground.Show(0.5f);
                 }
                 else if (cursor.hovered == main.chapters) { CloseSideMenus(); chapters.Show(); }

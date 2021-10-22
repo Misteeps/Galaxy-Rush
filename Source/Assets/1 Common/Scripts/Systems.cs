@@ -32,6 +32,23 @@ namespace GalaxyRush
 
             scores = new Dictionary<int, int>();
         }
+
+        public static string LevelName(int level)
+        {
+            switch (level)
+            {
+                default: return "Menu";
+                case 0: return "Tutorial";
+            }
+        }
+        public static string GetUnplayedLevel()
+        {
+            for (int i = 0; i < 10; i++)
+                if (!scores.ContainsKey(i))
+                    return LevelName(i);
+
+            return "Menu";
+        }
     }
     #endregion Global
 

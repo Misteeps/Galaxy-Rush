@@ -20,7 +20,11 @@ namespace GalaxyRush
         public void Hit()
         {
             gameObject.SetActive(false);
-            // Add Score based on star size
+
+            if (transform.localScale.x < 1)
+                Global.game.AddScore(200, "Destroyed small star");
+            else
+                Global.game.AddScore(600, "Destroyed large star");
         }
 
         public void OnTriggerEnter(Collider other)
