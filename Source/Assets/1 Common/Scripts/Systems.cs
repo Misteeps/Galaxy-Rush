@@ -22,6 +22,7 @@ namespace GalaxyRush
         public static Game game;
         public static SceneLoader loader;
         public static Camera camera;
+        public static Cinemachine.CinemachineVirtualCamera cinemachine;
         public static Player player;
 
 
@@ -49,6 +50,9 @@ namespace GalaxyRush
 
             return "Menu";
         }
+
+        public static void SetFOV() => SetFOV(Settings.fov);
+        public static void SetFOV(float value) => cinemachine.m_Lens.FieldOfView = value;
     }
     #endregion Global
 
@@ -170,7 +174,7 @@ namespace GalaxyRush
         {
             fov = value;
 
-            Global.camera.GetComponent<Cinemachine.CinemachineVirtualCamera>().m_Lens.FieldOfView = value;
+            Global.SetFOV(value);
         }
 
         public static void Brightness(float value)

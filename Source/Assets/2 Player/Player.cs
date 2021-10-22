@@ -16,6 +16,7 @@ namespace GalaxyRush
 			public float softClamp = 25f;
 
 			[Header("Readonly")]
+			public float fov;
 			public float yaw;
 			public float pitch;
 		}
@@ -56,7 +57,7 @@ namespace GalaxyRush
 			public float dashCooldown;
 			public bool doubleJump;
 			public float coyoteTimer;
-			public bool grounded = true;
+			public bool grounded;
 			public float jumpPadTimer;
 			public float armSwing;
 			public Transition.Tween strafe;
@@ -186,7 +187,11 @@ namespace GalaxyRush
 			movement.dash = false;
 			movement.dashCooldown = 0;
 			movement.doubleJump = false;
+			movement.coyoteTimer = 0;
+			movement.grounded = false;
+			movement.jumpPadTimer = 0;
 			movement.armSwing = 0;
+			movement.strafe = null;
 
 			shots.shots = null;
 			shots.amount = 0;
@@ -231,7 +236,9 @@ namespace GalaxyRush
 
 			MoveShots();
 
-
+			float targetFov = Settings.fov +  Mathf.Lerp(-2, 10, Mathf.InverseLerp(0, 100, movement.speed));
+			head.fov = Mathf.Lerp(head.fov, targetFov, Time.unscaledDeltaTime * 10);
+			Global.SetFOV(head.fov);
 			TurnHead();
 
 			movement.armSwing += movement.armSpeed * Time.unscaledDeltaTime;
@@ -565,6 +572,8 @@ namespace GalaxyRush
 			Transition.Add(cameraPosition.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 1.375f, 2.5f, 1);
 			Transition.Add(cameraPosition.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Z, EaseFunctions.Exponential, EaseDirections.Out, 0, -3f, 1);
 			Transition.Add((v) => cameraPosition.rotation = Quaternion.LookRotation(((transform.position + Vector3.up * 1.375f) - cameraPosition.position).normalized), EaseFunctions.Quadratic, EaseDirections.Out, 0, 1, 1);
+
+			Global.SetFOV();
 
 			Global.game.deaths += 1;
 			Global.game.multiplier = Mathf.Clamp(Global.game.multiplier - 1, 0, int.MaxValue);

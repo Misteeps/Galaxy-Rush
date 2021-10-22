@@ -110,16 +110,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   head:
     softClamp: 25
+    fov: 0
     yaw: 0
     pitch: 0
   movement:
     runSpeed: 24
-    dashSpeed: 100
+    dashSpeed: 120
     speedModifier: 1
     acceleration: 8
     armSpeed: 2
     strafeTime: 0.1
-    strafeDistance: 3
+    strafeDistance: 4
     jumpHeight: 2.4
     doubleJumpHeight: 3.2
     gravity: -20

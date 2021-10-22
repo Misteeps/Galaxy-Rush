@@ -739,6 +739,8 @@ namespace GalaxyRush
             Global.game = null;
             Global.loader = GameObject.FindWithTag("Scene Loader").GetComponent<SceneLoader>();
             Global.camera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+            Global.cinemachine = Global.camera.GetComponent<Cinemachine.CinemachineVirtualCamera>();
+            Global.player = null;
 
             Global.loader.gameObject.SetActive(false);
 
