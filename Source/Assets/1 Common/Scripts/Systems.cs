@@ -108,7 +108,7 @@ namespace GalaxyRush
         }
         public static void Defaults()
         {
-            CursorSensitivity(20);
+            CursorSensitivity(10);
             LookSensitivity(10);
 
             CursorSize(10);
@@ -129,8 +129,8 @@ namespace GalaxyRush
             MusicVolume(40);
 
 #if UNITY_EDITOR
-            CursorSensitivity(1);
-            LookSensitivity(1);
+            CursorSensitivity(0.8f);
+            LookSensitivity(0.6f);
             Fov(100);
 #endif
         }

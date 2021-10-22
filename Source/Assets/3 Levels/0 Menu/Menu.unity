@@ -4806,7 +4806,7 @@ MonoBehaviour:
     targeted: {x: 0, y: 0, z: 0}
   foreground:
     group: {fileID: 1003037327}
-    targetLevel: 0
+    load: 
   main:
     group: {fileID: 1747772588}
     play: {fileID: 936004426}
@@ -6614,11 +6614,31 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Music : Ghost Data
+  m_text: '- Music -
+
+    Ghost Data
+
+    <size=16>ghostdata.com</size>
 
 
 
-    Font : Olga'
+
+    -
+    Planet Textures -
+
+    Solar System Scope
+
+    <size=16>solarsystemscope.com/textures</size>
+
+
+
+
+    -
+    Font -
+
+    Olga
+
+    <size=16>1001fonts.com/olga-font.html</size>'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9343871d48f39964784f7bbab4755a57, type: 2}
   m_sharedMaterial: {fileID: -1706256585899923328, guid: 9343871d48f39964784f7bbab4755a57, type: 2}
@@ -6652,12 +6672,12 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: 5
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
