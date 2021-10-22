@@ -535,7 +535,7 @@ namespace GalaxyRush
 		{
 			if (movement.deathLayers == (movement.deathLayers | 1 << hit.gameObject.layer))
 				Death();
-			else if (movement.jumpPadLayers == (movement.jumpPadLayers | 1 << hit.gameObject.layer) && movement.jumpPadTimer >= 2)
+			else if (movement.jumpPadLayers == (movement.jumpPadLayers | 1 << hit.gameObject.layer) && movement.jumpPadTimer >= 1)
             {
 				movement.jumpPadTimer = 0;
 				Transition.Add((v) => movement.verticalVelocity = v, EaseFunctions.Linear, EaseDirections.InOut, 100, 0, 1);
@@ -543,6 +543,8 @@ namespace GalaxyRush
 		}
 		public void Death()
 		{
+			if (Global.game.foreground.load == "Clear") return;
+
 			Aim(false);
 
 			gameObject.SetActive(false);

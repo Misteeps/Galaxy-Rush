@@ -16,6 +16,7 @@ namespace GalaxyRush
         public Menu.SettingsMenu settings;
 
         public Transform bounds;
+        public Transform[] planets;
         public Transform obstaclesGroup;
         public Transform targetsGroup;
         public Transform starsGroup;
@@ -103,6 +104,9 @@ namespace GalaxyRush
             Transition.IncrementObjects();
             Transition.IncrementTweens();
 
+            foreach (Transform planet in planets)
+                planet.Rotate(Vector3.up * Time.deltaTime * planet.localScale.x / 4000);
+
             foreground.Update();
 
             if (pause.active || settings.active)
@@ -175,6 +179,12 @@ namespace GalaxyRush
 
             ActivateObstacles(this.checkpoint, true);
             ActivateStars(this.checkpoint, true);
+
+            if (checkpoint == checkpoints.Length - 1)
+            {
+                Global.game.foreground.load = "Clear";
+                foreground.Show(1);
+            }
         }
         public int CheckpointFromPosition(float position)
         {

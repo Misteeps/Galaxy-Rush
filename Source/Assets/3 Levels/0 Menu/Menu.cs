@@ -35,6 +35,8 @@ namespace GalaxyRush
                 if (group.alpha >= 1)
                     if (load == "Death")
                         Global.player.Respawn();
+                    else if (load == "Clear")
+                        Debug.Log("Level Cleared");
                     else
                         Global.loader.Load(load);
 
