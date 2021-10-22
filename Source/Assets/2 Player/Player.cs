@@ -45,6 +45,7 @@ namespace GalaxyRush
 			public float groundedHitboxRadius = 0.5f;
 			public LayerMask groundedLayers;
 			public LayerMask deathLayers;
+			public LayerMask jumpPadLayers;
 
 			[Header("Readonly")]
 			public float speed;
@@ -56,6 +57,7 @@ namespace GalaxyRush
 			public bool doubleJump;
 			public float coyoteTimer;
 			public bool grounded = true;
+			public float jumpPadTimer;
 			public float armSwing;
 		}
 		#endregion Movement
@@ -203,6 +205,7 @@ namespace GalaxyRush
 		{
 			movement.dashCooldown += Time.deltaTime;
 			movement.strafeCooldown += Time.deltaTime;
+			movement.jumpPadTimer += Time.deltaTime;
 			if (movement.strafeCooldown >= movement.strafeTime) Strafe();
 			CheckGround();
 
@@ -532,6 +535,11 @@ namespace GalaxyRush
 		{
 			if (movement.deathLayers == (movement.deathLayers | 1 << hit.gameObject.layer))
 				Death();
+			else if (movement.jumpPadLayers == (movement.jumpPadLayers | 1 << hit.gameObject.layer) && movement.jumpPadTimer >= 2)
+            {
+				movement.jumpPadTimer = 0;
+				Transition.Add((v) => movement.verticalVelocity = v, EaseFunctions.Linear, EaseDirections.InOut, 100, 0, 1);
+            }
 		}
 		public void Death()
 		{

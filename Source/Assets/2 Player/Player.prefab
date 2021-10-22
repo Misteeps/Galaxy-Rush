@@ -132,6 +132,9 @@ MonoBehaviour:
     deathLayers:
       serializedVersion: 2
       m_Bits: 281600
+    jumpPadLayers:
+      serializedVersion: 2
+      m_Bits: 65536
     speed: 0
     verticalVelocity: 0
     lane: 0
@@ -141,13 +144,14 @@ MonoBehaviour:
     doubleJump: 0
     coyoteTimer: 0
     grounded: 1
+    jumpPadTimer: 0
     armSwing: 0
   shots:
     prefab: {fileID: 0}
     position: {fileID: 0}
     ui: {fileID: 0}
     max: 7
-    chargeTime: 5
+    chargeTime: 4
     collidableLayers:
       serializedVersion: 2
       m_Bits: 314368
