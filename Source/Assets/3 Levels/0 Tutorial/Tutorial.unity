@@ -4335,6 +4335,7 @@ MonoBehaviour:
       start: 0
       end: 1
       duration: 0.2
+  activationType: 1
   activationStep: 0
   activations:
   - obsticle: 0
@@ -5336,6 +5337,7 @@ MonoBehaviour:
       start: -7.5
       end: -2.6
       duration: 0.2
+  activationType: 1
   activationStep: 0
   activations: []
   targetsHit: 0
@@ -10016,6 +10018,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
   steps: []
+  activationType: 1
   activationStep: 0
   activations:
   - obsticle: 0
@@ -14665,6 +14668,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
   steps: []
+  activationType: 1
   activationStep: 0
   activations:
   - obsticle: 0
@@ -15474,6 +15478,7 @@ MonoBehaviour:
       start: 0
       end: 1
       duration: 0.2
+  activationType: 1
   activationStep: 0
   activations:
   - obsticle: 0
@@ -17297,6 +17302,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
   steps: []
+  activationType: 1
   activationStep: 0
   activations:
   - obsticle: 0

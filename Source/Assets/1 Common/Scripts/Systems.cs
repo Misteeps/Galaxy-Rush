@@ -118,7 +118,7 @@ namespace GalaxyRush
 
             CursorSize(10);
             CursorColor(new Color(1, 1, 1, 0.5f));
-            CursorFocusedColor(new Color(1, 0.5f, 0.5f, 1));
+            CursorFocusedColor(new Color(0, 1, 1, 1));
 
             Fov(80);
 

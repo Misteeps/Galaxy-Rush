@@ -91,6 +91,8 @@ namespace GalaxyRush
         public Object[] objects;
         public Step[] steps;
 
+        public enum ActivationType { None, Set, Increment }
+        public ActivationType activationType;
         public int activationStep;
         public TransitionAction[] activations;
 
@@ -141,7 +143,10 @@ namespace GalaxyRush
         }
         public virtual void Activate()
         {
-            SetStep(activationStep, false);
+            if (activationType == ActivationType.Set)
+                SetStep(activationStep, false);
+            else if (activationType == ActivationType.Increment)
+                SetStep(nextStep, true);
 
             foreach (TransitionAction action in activations)
                 action.Invoke(objects[action.obsticle].gameObject);
