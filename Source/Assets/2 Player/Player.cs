@@ -397,6 +397,9 @@ namespace GalaxyRush
 
 				if (start)
 				{
+					Global.game.slowTime.time = 0.3f;
+					Global.game.slowTime.Play();
+
 					slow.start = slow.amount;
 
 					rightArm.Animate(Arm.aim, true);
@@ -430,6 +433,8 @@ namespace GalaxyRush
 
 				if (start)
 				{
+					Global.game.slowTime.Stop();
+
 					slow.timer = 0;
 
 					rightArm.Animate(Arm.aim, false);
@@ -449,6 +454,8 @@ namespace GalaxyRush
 		{
 			GameObject shot = shots.shots[shots.current].gameObject;
 			shots.shots[shots.current] = null;
+
+			Global.game.PlaySound("Shoot", shot.transform.position);
 
 			Vector3 start = shot.transform.position;
 			Vector3 end = Global.game.cursor.targeted;

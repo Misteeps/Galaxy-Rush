@@ -109,9 +109,9 @@ namespace GalaxyRush
                 GameObject hovered = Global.menu.cursor.hovered;
 
                 if (Input.click.Down && hovered != null)
-                    if (hovered == level0) Global.loader.Load(Global.LevelName(0));
-                    else if (hovered == level1) Global.loader.Load(Global.LevelName(1));
-                    else if (hovered == close) Hide();
+                    if (hovered == level0) { Global.menu.uiClick.Play(); Global.loader.Load(Global.LevelName(0)); }
+                    else if (hovered == level1) { Global.menu.uiClick.Play(); Global.loader.Load(Global.LevelName(1)); }
+                    else if (hovered == close) { Global.menu.uiClick.Play(); Hide(); }
             }
 
             public override void Show(float speed = 0.25F)
@@ -523,7 +523,7 @@ namespace GalaxyRush
                 if (!locked)
                 {
                     if (Input.click.Down && hovered != null)
-                        if (hovered == close) Hide();
+                        if (hovered == close) { Global.menu?.uiClick.Play(); Global.game?.uiClick.Play(); Hide(); }
 
                     if (Input.scroll != 0)
                     {
@@ -610,7 +610,7 @@ namespace GalaxyRush
                 GameObject hovered = Global.menu.cursor.hovered;
 
                 if (Input.click.Down && hovered != null)
-                    if (hovered == close) Hide();
+                    if (hovered == close) { Global.menu.uiClick.Play(); Hide(); }
             }
 
             public override void Show(float speed = 0.25F)
@@ -648,10 +648,10 @@ namespace GalaxyRush
                 GameObject hovered = Global.game.cursor.hovered;
 
                 if (Input.click.Down && hovered != null)
-                    if (hovered == resume || hovered == close) Hide();
-                    else if (hovered == reset) { Hide(); Global.player.Death(); }
-                    else if (hovered == settings) { base.Hide(); active = false; Global.game.settings.Show(); }
-                    else if (hovered == quit) { Hide(); Global.loader.Load("Menu"); }
+                    if (hovered == resume || hovered == close) { Global.game.uiClick.Play(); Hide(); }
+                    else if (hovered == reset) { Global.game.uiClick.Play(); Hide(); Global.player.Death(); }
+                    else if (hovered == settings) { Global.game.uiClick.Play(); base.Hide(); active = false; Global.game.settings.Show(); }
+                    else if (hovered == quit) { Global.game.uiClick.Play(); Hide(); Global.loader.Load("Menu"); }
             }
 
             public override void Show(float speed = 0.25F)
@@ -709,8 +709,8 @@ namespace GalaxyRush
                 GameObject hovered = Global.game.cursor.hovered;
 
                 if (Input.click.Down && hovered != null)
-                    if (hovered == next) Global.loader.Load(Global.LevelName(nextLevel));
-                    else if (hovered == quit) Global.loader.Load("Menu");
+                    if (hovered == next) { Global.game.uiClick.Play(); Global.loader.Load(Global.LevelName(nextLevel)); }
+                    else if (hovered == quit) { Global.game.uiClick.Play(); Global.loader.Load("Menu"); }
             }
 
             public override void Show(float speed = 0.25F)
@@ -740,6 +740,8 @@ namespace GalaxyRush
         public Transform shots;
         public Transform earth;
         public Transform earthClouds;
+
+        public AudioSource uiClick;
 
         public bool settingsLocked;
 
@@ -800,15 +802,17 @@ namespace GalaxyRush
             {
                 if (cursor.hovered == main.play)
                 {
+                    uiClick.Play();
+
                     CloseSideMenus();
                     main.Hide(0.5f);
 
                     foreground.load = Global.GetUnplayedLevel();
                     foreground.Show(0.5f);
                 }
-                else if (cursor.hovered == main.chapters) { CloseSideMenus(); chapters.Show(); }
-                else if (cursor.hovered == main.settings) { CloseSideMenus(); settings.Show(); }
-                else if (cursor.hovered == main.credits) { CloseSideMenus(); credits.Show(); }
+                else if (cursor.hovered == main.chapters) { uiClick.Play(); CloseSideMenus(); chapters.Show(); }
+                else if (cursor.hovered == main.settings) { uiClick.Play(); CloseSideMenus(); settings.Show(); }
+                else if (cursor.hovered == main.credits) { uiClick.Play(); CloseSideMenus(); credits.Show(); }
             }
 
             if (Input.escape.Down)

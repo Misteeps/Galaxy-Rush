@@ -19,6 +19,7 @@ namespace GalaxyRush
 
         public void Hit()
         {
+            Global.game.PlaySound("Star Break", transform.position);
             gameObject.SetActive(false);
 
             if (transform.localScale.x < 1)

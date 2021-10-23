@@ -27,6 +27,10 @@ namespace GalaxyRush
         public TMPro.TextMeshProUGUI uiMultiplier;
         public TMPro.TextMeshProUGUI uiAddScore;
 
+        public new Transform audio;
+        public AudioSource uiClick;
+        public AudioSource slowTime;
+
         public int level;
         public float expectedTime;
         public Vector3[] checkpoints;
@@ -195,6 +199,7 @@ namespace GalaxyRush
             ActivateStars(this.checkpoint, false);
 
             AddScore(1000, "Reached Checkpoint");
+            PlaySound("Checkpoint", checkpoints[checkpoint]);
 
             this.checkpoint = checkpoint;
             this.multiplier++;
@@ -239,6 +244,13 @@ namespace GalaxyRush
                 uiAddScore.alpha = Mathf.Lerp(1, 0, v);
                 if (v > 0.9f) uiScore.text = $"{score}";
             }, EaseFunctions.Exponential, EaseDirections.In, 0, 1, 2);
+        }
+
+        public void PlaySound(string sound, Vector3 position)
+        {
+            AudioSource source = audio.Find(sound).GetComponent<AudioSource>();
+            source.transform.position = position;
+            source.PlayOneShot(source.clip);
         }
     }
 }

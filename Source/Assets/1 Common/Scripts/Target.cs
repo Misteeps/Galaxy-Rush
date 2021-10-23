@@ -55,6 +55,8 @@ namespace GalaxyRush
 
             if (value)
             {
+                Global.game.PlaySound("Target Hit", transform.position);
+
                 obstacle?.TargetHit(1);
                 SetColors(hitBase, hitColor);
                 timer = 0;
