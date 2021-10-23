@@ -179,6 +179,8 @@ namespace GalaxyRush
             for (int i = 0; i < obstacles.Length; i++)
                 foreach (Obstacle obstacle in obstacles[i])
                     obstacle.ResetValues();
+
+            ActivateObstacles(this.checkpoint, true);
         }
         public void ResetTargets()
         {

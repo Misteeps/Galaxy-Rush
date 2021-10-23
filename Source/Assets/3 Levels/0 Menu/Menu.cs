@@ -459,8 +459,8 @@ namespace GalaxyRush
             {
                 base.Initialize();
 
-                cursorSensitivity.Initialize(Settings.cursorSensitivity, 0.1f, 40, 10, Settings.CursorSensitivity);
-                lookSensitivity.Initialize(Settings.lookSensitivity, 0.1f, 40, 10, Settings.LookSensitivity);
+                cursorSensitivity.Initialize(Settings.cursorSensitivity, 0.1f, 20, 10, Settings.CursorSensitivity);
+                lookSensitivity.Initialize(Settings.lookSensitivity, 0.1f, 20, 10, Settings.LookSensitivity);
 
                 cursorSize.Initialize(Settings.cursorSize, 1, 100, Settings.CursorSize);
                 cursorColor.Initialize(Settings.cursorColor, Settings.CursorColor);

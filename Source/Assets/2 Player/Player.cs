@@ -537,7 +537,7 @@ namespace GalaxyRush
 			transform.position = position;
 			controller.enabled = true;
 
-			if (Physics.CheckCapsule(transform.position, transform.position + new Vector3(0, 1.8f, 0), 0.4f, movement.deathLayers))
+			if (Physics.CheckCapsule(transform.position + new Vector3(0, 0.4f, 0), transform.position + new Vector3(0, 1.4f, 0), 0.4f, movement.deathLayers))
             {
 				movement.strafe.Stop();
 				Death();
@@ -576,7 +576,7 @@ namespace GalaxyRush
 			Global.SetFOV();
 
 			Global.game.deaths += 1;
-			Global.game.multiplier = Mathf.Clamp(Global.game.multiplier - 1, 0, int.MaxValue);
+			Global.game.multiplier = Mathf.Clamp(Global.game.multiplier - 1, 1, int.MaxValue);
 
 			Global.game.foreground.load = "Death";
 			Global.game.foreground.Show(2);

@@ -21,12 +21,14 @@ namespace GalaxyRush
         public float timer;
 
         public new MeshRenderer renderer;
+        public new Collider collider;
         public MaterialPropertyBlock mat;
 
 
         public void Initialize()
         {
             renderer = GetComponent<MeshRenderer>();
+            collider = GetComponent<Collider>();
             mat = new MaterialPropertyBlock();
         }
         public void ResetValues()
@@ -35,6 +37,7 @@ namespace GalaxyRush
             timer = 0;
             SetColors(normalBase, normalColor);
 
+            collider.enabled = true;
             enabled = false;
         }
 
@@ -52,18 +55,20 @@ namespace GalaxyRush
 
             if (value)
             {
-                obstacle.TargetHit(1);
+                obstacle?.TargetHit(1);
                 SetColors(hitBase, hitColor);
                 timer = 0;
+                collider.enabled = false;
 
                 if (resetTime != 0)
                     enabled = true;
             }
             else
             {
-                obstacle.TargetHit(-1);
+                obstacle?.TargetHit(-1);
                 SetColors(normalBase, normalColor);
                 timer = 0;
+                collider.enabled = true;
 
                 enabled = false;
             }

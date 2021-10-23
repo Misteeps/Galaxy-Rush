@@ -40,6 +40,7 @@ namespace GalaxyRush
             {
                 default: return "Menu";
                 case 0: return "Tutorial";
+                case 1: return "1";
             }
         }
         public static string GetUnplayedLevel()
@@ -112,8 +113,8 @@ namespace GalaxyRush
         }
         public static void Defaults()
         {
-            CursorSensitivity(10);
-            LookSensitivity(10);
+            CursorSensitivity(8);
+            LookSensitivity(4);
 
             CursorSize(10);
             CursorColor(new Color(1, 1, 1, 0.5f));
