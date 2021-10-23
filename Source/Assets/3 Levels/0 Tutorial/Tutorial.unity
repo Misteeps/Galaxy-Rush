@@ -17636,6 +17636,10 @@ MonoBehaviour:
   uiScore: {fileID: 794133367}
   uiMultiplier: {fileID: 1176173136}
   uiAddScore: {fileID: 466714209}
+  audioMixer: {fileID: 24100000, guid: 518200a43129c8e4c8d24648313aec6c, type: 2}
+  audio: {fileID: 1932810237}
+  uiClick: {fileID: 121740281}
+  slowTime: {fileID: 1759970702}
   level: 0
   expectedTime: 120
   checkpoints:
@@ -17649,9 +17653,6 @@ MonoBehaviour:
   checkpoint: 0
   multiplier: 0
   score: 0
-  audio: {fileID: 1932810237}
-  uiClick: {fileID: 121740281}
-  slowTime: {fileID: 1759970702}
   settingsLocked: 0
 --- !u!4 &1324376770
 Transform:

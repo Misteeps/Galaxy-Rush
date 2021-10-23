@@ -557,7 +557,7 @@ Transform:
   - {fileID: 1749171587}
   - {fileID: 1210381403}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &145213607
 PrefabInstance:
@@ -5398,7 +5398,7 @@ RectTransform:
   - {fileID: 1774514390}
   - {fileID: 1406254101}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5507,6 +5507,7 @@ MonoBehaviour:
   shots: {fileID: 1268491238}
   earth: {fileID: 791747867}
   earthClouds: {fileID: 1352030310}
+  audioMixer: {fileID: 24100000, guid: 518200a43129c8e4c8d24648313aec6c, type: 2}
   uiClick: {fileID: 1210381404}
   settingsLocked: 0
 --- !u!1001 &1464778773

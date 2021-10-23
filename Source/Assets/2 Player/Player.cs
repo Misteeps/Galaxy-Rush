@@ -357,8 +357,8 @@ namespace GalaxyRush
 		{
 			Vector2 turn = Input.mouseDelta;
 			if (slow.active) turn *= 0.5f;
-			head.yaw = SoftTurn(head.yaw, turn.x * Settings.lookSensitivity, 75);
-			head.pitch = SoftTurn(head.pitch, turn.y * -Settings.lookSensitivity, 89.9f);
+			head.yaw = SoftTurn(head.yaw, turn.x * Settings.lookSensitivity / 5, 75);
+			head.pitch = SoftTurn(head.pitch, turn.y * -Settings.lookSensitivity / 5, 89.9f);
 
 			cameraPosition.transform.localRotation = Quaternion.Euler(head.pitch, head.yaw, 0);
 		}

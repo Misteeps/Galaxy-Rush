@@ -109621,6 +109621,7 @@ MonoBehaviour:
   uiScore: {fileID: 1690054487}
   uiMultiplier: {fileID: 1690054486}
   uiAddScore: {fileID: 1690054483}
+  audioMixer: {fileID: 24100000, guid: 518200a43129c8e4c8d24648313aec6c, type: 2}
   audio: {fileID: 573829731}
   uiClick: {fileID: 573829733}
   slowTime: {fileID: 573829732}

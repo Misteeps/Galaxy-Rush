@@ -741,6 +741,7 @@ namespace GalaxyRush
         public Transform earth;
         public Transform earthClouds;
 
+        public UnityEngine.Audio.AudioMixer audioMixer;
         public AudioSource uiClick;
 
         public bool settingsLocked;

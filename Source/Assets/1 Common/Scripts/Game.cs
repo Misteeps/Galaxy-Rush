@@ -27,6 +27,7 @@ namespace GalaxyRush
         public TMPro.TextMeshProUGUI uiMultiplier;
         public TMPro.TextMeshProUGUI uiAddScore;
 
+        public UnityEngine.Audio.AudioMixer audioMixer;
         public new Transform audio;
         public AudioSource uiClick;
         public AudioSource slowTime;

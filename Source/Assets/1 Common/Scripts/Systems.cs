@@ -123,7 +123,7 @@ namespace GalaxyRush
         public static void Defaults()
         {
             CursorSensitivity(8);
-            LookSensitivity(4);
+            LookSensitivity(8);
 
             CursorSize(10);
             CursorColor(new Color(1, 1, 1, 0.5f));
@@ -139,8 +139,8 @@ namespace GalaxyRush
             Bloom(4);
             ChromaticAberration(0);
 
-            SFXVolume(40);
-            MusicVolume(40);
+            SFXVolume(50);
+            MusicVolume(50);
 
 #if UNITY_EDITOR
             CursorSensitivity(0.8f);
@@ -240,10 +240,24 @@ namespace GalaxyRush
         public static void SFXVolume(float value)
         {
             sfxVolume = value;
+
+            Global.menu?.audioMixer.SetFloat("SFX", GetDecibel(value));
+            Global.game?.audioMixer.SetFloat("SFX", GetDecibel(value));
         }
         public static void MusicVolume(float value)
         {
             musicVolume = value;
+
+            Global.menu?.audioMixer.SetFloat("Music", GetDecibel(value));
+            Global.game?.audioMixer.SetFloat("Music", GetDecibel(value));
+        }
+
+        public static float GetDecibel(float value)
+        {
+            if (value == 0) return -144;
+
+            value = Mathf.InverseLerp(0, 100, value);
+            return 20.0f * Mathf.Log10(value);
         }
     }
     #endregion Settings
