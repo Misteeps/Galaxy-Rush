@@ -17631,7 +17631,7 @@ MonoBehaviour:
   uiScore: {fileID: 794133367}
   uiMultiplier: {fileID: 1176173136}
   uiAddScore: {fileID: 466714209}
-  level: 1
+  level: 0
   expectedTime: 120
   checkpoints:
   - {x: 0, y: 0, z: -225}

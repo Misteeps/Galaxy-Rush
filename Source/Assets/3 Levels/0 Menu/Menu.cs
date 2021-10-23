@@ -95,6 +95,11 @@ namespace GalaxyRush
         [Serializable]
         public class ChaptersMenu : UI.Group
         {
+            public GameObject level0;
+            public TMPro.TextMeshProUGUI score0;
+            public GameObject level1;
+            public TMPro.TextMeshProUGUI score1;
+
             public GameObject close;
             public bool active;
 
@@ -104,7 +109,9 @@ namespace GalaxyRush
                 GameObject hovered = Global.menu.cursor.hovered;
 
                 if (Input.click.Down && hovered != null)
-                    if (hovered == close) Hide();
+                    if (hovered == level0) Global.loader.Load(Global.LevelName(0));
+                    else if (hovered == level1) Global.loader.Load(Global.LevelName(1));
+                    else if (hovered == close) Hide();
             }
 
             public override void Show(float speed = 0.25F)
@@ -113,6 +120,12 @@ namespace GalaxyRush
 
                 group.transform.localPosition = new Vector3(group.transform.localPosition.x, sideMenuYStart, group.transform.localPosition.z);
                 Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, sideMenuYStart, sideMenuYEnd, speed, true);
+
+                int score = 0;
+                if (Global.scores.TryGetValue(0, out score)) score0.text = $"High Score : {score}";
+                else score0.text = "High Score : //";
+                if (Global.scores.TryGetValue(1, out score)) score1.text = $"High Score : {score}";
+                else score1.text = "High Score : //";
 
                 active = true;
             }

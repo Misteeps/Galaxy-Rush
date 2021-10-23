@@ -49,11 +49,20 @@ namespace GalaxyRush
                 if (!scores.ContainsKey(i))
                     return LevelName(i);
 
-            return "Menu";
+            return "1";
         }
 
         public static void SetFOV() => SetFOV(Settings.fov);
         public static void SetFOV(float value) => cinemachine.m_Lens.FieldOfView = value;
+
+        public static void NewScore(int level, int score)
+        {
+            if (!scores.ContainsKey(level))
+                scores.Add(level, score);
+            else if (scores[level] < score)
+                scores[level] = score;
+
+        }
     }
     #endregion Global
 

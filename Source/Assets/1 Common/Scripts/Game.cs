@@ -209,6 +209,8 @@ namespace GalaxyRush
                 multiplier = 1;
                 AddScore(Mathf.RoundToInt(Mathf.Lerp(checkpoints.Length * 1500, 0, Mathf.InverseLerp(0, expectedTime, Global.game.time))), "Time Bonus");
 
+                Global.NewScore(level, score);
+
                 results.nextLevel = level + 1;
                 results.Show();
             }

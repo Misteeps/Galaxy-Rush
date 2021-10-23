@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: f818af85ae888084eb14ccb305a5dcea, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -15934,15 +15934,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562745, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562745, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562745, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1000
+      value: -3000
       objectReference: {fileID: 0}
     - target: {fileID: 8823702982601562745, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: m_LocalRotation.w
@@ -27951,8 +27951,8 @@ MonoBehaviour:
     - obsticle: 0
       component: 1
       unit: 2
-      function: 0
-      direction: 2
+      function: 7
+      direction: 0
       start: 50
       end: -50
       duration: 3
@@ -28723,15 +28723,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6319353081521216695, guid: 9ff95dd007a9d71459a938c5f9ffc8d3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6319353081521216695, guid: 9ff95dd007a9d71459a938c5f9ffc8d3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -23.625
+      value: 1.375
       objectReference: {fileID: 0}
     - target: {fileID: 6319353081521216695, guid: 9ff95dd007a9d71459a938c5f9ffc8d3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1000
+      value: -3000
       objectReference: {fileID: 0}
     - target: {fileID: 6319353081521216695, guid: 9ff95dd007a9d71459a938c5f9ffc8d3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -61705,8 +61705,8 @@ MonoBehaviour:
     - obsticle: 0
       component: 1
       unit: 2
-      function: 0
-      direction: 2
+      function: 7
+      direction: 0
       start: 110
       end: -110
       duration: 4
@@ -104417,7 +104417,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: -3000}
   - {x: 0, y: -25, z: -2125}
   - {x: 12, y: -25, z: -1000}
-  - {x: 0, y: 0, z: 0}
+  - {x: 12, y: -25, z: -500}
   time: 0
   deaths: 0
   shots: 0
