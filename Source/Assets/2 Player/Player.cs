@@ -569,8 +569,8 @@ namespace GalaxyRush
 				if (shots.shots[i] != null)
 					Destroy(shots.shots[i].gameObject);
 
-			Transition.Add(cameraPosition.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 1.375f, 2.5f, 1);
-			Transition.Add(cameraPosition.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Z, EaseFunctions.Exponential, EaseDirections.Out, 0, -3f, 1);
+			Transition.Add(cameraPosition.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Exponential, EaseDirections.Out, 1.375f, 2.5f, 1, true);
+			Transition.Add(cameraPosition.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Z, EaseFunctions.Exponential, EaseDirections.Out, 0, -3f, 1, true);
 			Transition.Add((v) => cameraPosition.rotation = Quaternion.LookRotation(((transform.position + Vector3.up * 1.375f) - cameraPosition.position).normalized), EaseFunctions.Quadratic, EaseDirections.Out, 0, 1, 1);
 
 			Global.SetFOV();
