@@ -593,6 +593,8 @@ namespace GalaxyRush
 
 			Global.SetFOV();
 
+			Global.game.PlaySound("Death", transform.position);
+
 			Global.game.deaths += 1;
 			Global.game.multiplier = Mathf.Clamp(Global.game.multiplier - 1, 1, int.MaxValue);
 
