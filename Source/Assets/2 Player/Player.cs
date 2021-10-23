@@ -305,6 +305,8 @@ namespace GalaxyRush
 
 			if (Input.dash.Down && movement.dashCooldown >= 0.25f && (movement.grounded || movement.dash))
 			{
+				Global.game.PlaySound("Dash", transform.position);
+
 				movement.dash = false;
 				movement.dashCooldown = 0;
 				rightArm.Animate(Arm.dash);
@@ -324,10 +326,17 @@ namespace GalaxyRush
 				leftArm.Animate(Arm.grounded, true);
 
 				if (movement.verticalVelocity < 0)
-					movement.verticalVelocity = -2f;
+                {
+					if (movement.verticalVelocity < -5)
+						Global.game.PlaySound("Land", transform.position);
+
+					movement.verticalVelocity = -2;
+                }
 
 				if (Input.jump.Down)
 				{
+					Global.game.PlaySound("Jump", transform.position);
+
 					movement.verticalVelocity = Mathf.Sqrt(movement.jumpHeight * -2f * movement.gravity);
 					rightArm.Animate(Arm.jump);
 					leftArm.Animate(Arm.jump);
@@ -340,6 +349,8 @@ namespace GalaxyRush
 
 				if (Input.jump.Down && movement.doubleJump)
 				{
+					Global.game.PlaySound("Double Jump", transform.position);
+
 					movement.doubleJump = false;
 					movement.verticalVelocity = Mathf.Sqrt(movement.doubleJumpHeight * -2f * movement.gravity);
 					rightArm.Animate(Arm.dash);

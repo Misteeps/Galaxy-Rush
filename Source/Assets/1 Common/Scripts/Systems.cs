@@ -143,8 +143,8 @@ namespace GalaxyRush
             MusicVolume(50);
 
 #if UNITY_EDITOR
-            CursorSensitivity(0.8f);
-            LookSensitivity(0.6f);
+            CursorSensitivity(1);
+            LookSensitivity(1);
             Fov(100);
 #endif
         }
