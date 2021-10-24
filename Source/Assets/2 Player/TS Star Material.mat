@@ -78,8 +78,9 @@ Material:
     m_Ints: []
     m_Floats:
     - Ambient_Occlusion: 0
+    - Fresnal: 3
     - Metallic: 0
-    - RGB: 0.15
+    - RGB: 0.1
     - Smoothness: 1
     - _AlphaClip: 0
     - _Blend: 0

@@ -84,7 +84,7 @@ Material:
     - Lines_Length: 0.2
     - Lines_Width: 0.02
     - Metallic: 0
-    - RGB: 0.1
+    - RGB: 0.15
     - RGBSpeed: 0.15
     - Smoothness: 0.5
     - _AlphaClip: 0

@@ -49,7 +49,7 @@ Material:
     - Ambient_Occlusion: 100
     - Fresnal: 1
     - Metallic: 0
-    - RGB: 0.15
+    - RGB: 0.1
     - Scale: 10
     - Smoothness: 0.95
     - Speed: 0.15
