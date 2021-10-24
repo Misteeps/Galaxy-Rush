@@ -95,10 +95,9 @@ namespace GalaxyRush
         [Serializable]
         public class ChaptersMenu : UI.Group
         {
-            public GameObject level0;
-            public TMPro.TextMeshProUGUI score0;
-            public GameObject level1;
-            public TMPro.TextMeshProUGUI score1;
+            public TMPro.TextMeshProUGUI level0;
+            public TMPro.TextMeshProUGUI level1;
+            public TMPro.TextMeshProUGUI level2;
 
             public GameObject close;
             public bool active;
@@ -109,8 +108,9 @@ namespace GalaxyRush
                 GameObject hovered = Global.menu.cursor.hovered;
 
                 if (Input.click.Down && hovered != null)
-                    if (hovered == level0) { Global.menu.uiClick.Play(); Global.loader.Load(Global.LevelName(0)); }
-                    else if (hovered == level1) { Global.menu.uiClick.Play(); Global.loader.Load(Global.LevelName(1)); }
+                    if (hovered == level0.gameObject) { Global.menu.uiClick.Play(); Global.loader.Load(Global.LevelName(0)); }
+                    else if (hovered == level1.gameObject) { Global.menu.uiClick.Play(); Global.loader.Load(Global.LevelName(1)); }
+                    else if (hovered == level2.gameObject) { Global.menu.uiClick.Play(); Global.loader.Load(Global.LevelName(2)); }
                     else if (hovered == close) { Global.menu.uiClick.Play(); Hide(); }
             }
 
@@ -121,11 +121,15 @@ namespace GalaxyRush
                 group.transform.localPosition = new Vector3(group.transform.localPosition.x, sideMenuYStart, group.transform.localPosition.z);
                 Transition.Add(group.gameObject, TransitionComponents.LocalPosition, TransitionUnits.Y, EaseFunctions.Quadratic, EaseDirections.Out, sideMenuYStart, sideMenuYEnd, speed, true);
 
-                int score = 0;
-                if (Global.scores.TryGetValue(0, out score)) score0.text = $"High Score : {score}";
-                else score0.text = "High Score : //";
-                if (Global.scores.TryGetValue(1, out score)) score1.text = $"High Score : {score}";
-                else score1.text = "High Score : //";
+                void SetLevelText(TMPro.TextMeshProUGUI text, int level, string name)
+                {
+                    if (Global.scores.TryGetValue(level, out var score)) text.text = LevelText($"{level} - {name}", $"{score.score}", $"{TimeSpan.FromSeconds(score.time):mm\\:ss}");
+                    else text.text = LevelText($"{level} - {name}", "x", "x");
+                }
+                string LevelText(string level, string score, string time) => $"{level}\n<size=30>High Score : {score}\nBest Time : {time}</size>";
+                SetLevelText(level0, 0, "Tutorial");
+                SetLevelText(level1, 1, "Absolution");
+                SetLevelText(level2, 2, "Ascension");
 
                 active = true;
             }
@@ -720,8 +724,7 @@ namespace GalaxyRush
                 active = true;
                 Time.timeScale = 1;
 
-                TimeSpan time = TimeSpan.FromSeconds(Global.game.time);
-                stats.text = $"Time - {time:mm\\:ss}\nDeaths - {Global.game.deaths}\nShots - {Global.game.shots}";
+                stats.text = $"Time - {TimeSpan.FromSeconds(Global.game.time):mm\\:ss}\nDeaths - {Global.game.deaths}\nShots - {Global.game.shots}";
                 score.text = $"Score:\n{Global.game.score}";
             }
         }

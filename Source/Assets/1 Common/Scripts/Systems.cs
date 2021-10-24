@@ -16,7 +16,7 @@ namespace GalaxyRush
     {
         private static bool initialized;
 
-        public static Dictionary<int, int> scores;
+        public static Dictionary<int, (int score, float time)> scores;
 
         public static Menu menu;
         public static Game game;
@@ -31,7 +31,7 @@ namespace GalaxyRush
             if (initialized) return;
             initialized = true;
 
-            scores = new Dictionary<int, int>();
+            scores = new Dictionary<int, (int score, float time)>();
         }
 
         public static string LevelName(int level)
@@ -41,26 +41,35 @@ namespace GalaxyRush
                 default: return "Menu";
                 case 0: return "Tutorial";
                 case 1: return "1";
+                case 2: return "2";
             }
         }
         public static string GetUnplayedLevel()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 2; i++)
+            {
+                Debug.Log(i);
                 if (!scores.ContainsKey(i))
                     return LevelName(i);
+            }
 
-            return "1";
+            return "2";
         }
 
         public static void SetFOV() => SetFOV(Settings.fov);
         public static void SetFOV(float value) => cinemachine.m_Lens.FieldOfView = value;
 
-        public static void NewScore(int level, int score)
+        public static void NewScore(int level, int score, float time)
         {
             if (!scores.ContainsKey(level))
-                scores.Add(level, score);
-            else if (scores[level] < score)
-                scores[level] = score;
+                scores.Add(level, (score, time));
+            else
+            {
+                if (scores[level].score > score) score = scores[level].score;
+                if (scores[level].time < time) time = scores[level].time;
+
+                scores[level] = (score, time);
+            }
 
         }
     }

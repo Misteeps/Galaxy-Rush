@@ -212,7 +212,7 @@ namespace GalaxyRush
 			movement.dashCooldown += Time.deltaTime;
 			movement.strafeCooldown += Time.deltaTime;
 			movement.jumpPadTimer += Time.deltaTime;
-			if (movement.strafeCooldown >= movement.strafeTime) Strafe();
+			Strafe();
 			CheckGround();
 
 			float y = Jump();
@@ -251,8 +251,17 @@ namespace GalaxyRush
 		public void Strafe()
 		{
 			int lane = movement.lane;
-			if (Input.strafeRight.Down) lane++;
-			if (Input.strafeLeft.Down) lane--;
+
+			if (movement.strafeCooldown >= movement.strafeTime * 2.5f)
+			{
+				if (Input.strafeRight.Held) lane++;
+				if (Input.strafeLeft.Held) lane--;
+			}
+			else if (movement.strafeCooldown >= movement.strafeTime)
+			{
+				if (Input.strafeRight.Down) lane++;
+				if (Input.strafeLeft.Down) lane--;
+			}
 
 			if (lane != movement.lane)
 			{

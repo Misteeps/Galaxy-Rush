@@ -149,8 +149,7 @@ namespace GalaxyRush
             else
             {
                 this.time += Time.unscaledDeltaTime;
-                TimeSpan time = TimeSpan.FromSeconds(this.time);
-                uiTime.text = $"{time:mm\\:ss}";
+                uiTime.text = $"{TimeSpan.FromSeconds(this.time):mm\\:ss}";
 
                 cursor.GetTargeted();
 
@@ -215,7 +214,7 @@ namespace GalaxyRush
                 multiplier = 1;
                 AddScore(Mathf.RoundToInt(Mathf.Lerp(checkpoints.Length * 1500, 0, Mathf.InverseLerp(0, expectedTime, Global.game.time))), "Time Bonus");
 
-                Global.NewScore(level, score);
+                Global.NewScore(level, score, time);
 
                 results.nextLevel = level + 1;
                 results.Show();
