@@ -19638,10 +19638,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1068747982}
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
-      propertyPath: slow.max
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: slow.star
       value: 
       objectReference: {fileID: 790259166}

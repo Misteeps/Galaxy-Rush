@@ -46,12 +46,9 @@ namespace GalaxyRush
         }
         public static string GetUnplayedLevel()
         {
-            for (int i = 0; i < 2; i++)
-            {
-                Debug.Log(i);
+            for (int i = 0; i < 3; i++)
                 if (!scores.ContainsKey(i))
                     return LevelName(i);
-            }
 
             return "2";
         }
