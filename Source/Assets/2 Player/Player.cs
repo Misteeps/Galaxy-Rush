@@ -578,6 +578,8 @@ namespace GalaxyRush
 				Death();
 			else if (movement.jumpPadLayers == (movement.jumpPadLayers | 1 << hit.gameObject.layer) && movement.jumpPadTimer >= 1)
 			{
+				Global.game.PlaySound("Double Jump", transform.position);
+
 				movement.jumpPadTimer = 0;
 				Transition.Add((v) => movement.verticalVelocity = v, EaseFunctions.Linear, EaseDirections.InOut, 100, 0, 1);
 			}
