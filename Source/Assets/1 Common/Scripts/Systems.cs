@@ -149,8 +149,8 @@ namespace GalaxyRush
             MusicVolume(50);
 
 #if UNITY_EDITOR
-            CursorSensitivity(1);
-            LookSensitivity(1);
+            CursorSensitivity(2);
+            LookSensitivity(2);
             Fov(100);
 #endif
         }
@@ -294,7 +294,7 @@ namespace GalaxyRush
 
         //public static Vector2 cursor => Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
         //public static Vector2 cursor => Camera.main.ScreenToViewportPoint(UnityEngine.Input.mousePosition);
-        public static Vector2 mouseDelta => new Vector2(UnityEngine.Input.GetAxis("X"), UnityEngine.Input.GetAxis("Y"));
+        public static Vector2 mouseDelta => new Vector2(UnityEngine.Input.GetAxis("X"), UnityEngine.Input.GetAxis("Y")) / 2;
         public static float scroll => UnityEngine.Input.GetAxis("Scroll");
 
         public static Trigger click;

@@ -111,7 +111,7 @@ Material:
     m_Colors:
     - Base: {r: 0, g: 0, b: 0, a: 0.4}
     - HDR: {r: 5.992157, g: 5.992157, b: 5.992157, a: 1}
-    - Scale: {r: 40, g: 40, b: 0, a: 0}
+    - Scale: {r: 30, g: 30, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
