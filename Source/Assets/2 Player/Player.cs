@@ -94,6 +94,7 @@ namespace GalaxyRush
 			public Transform position;
 			public RectTransform ui;
 			public float max = 5;
+			public float chargeSpeed = 1;
 			public float cooldown = 0.5f;
 
 			[Header("Readonly")]
@@ -448,7 +449,7 @@ namespace GalaxyRush
 			{
 				Time.timeScale = 1;
 				slow.active = false;
-				slow.amount = Mathf.Clamp(slow.amount + Time.unscaledDeltaTime, 0, slow.max);
+				slow.amount = Mathf.Clamp(slow.amount + (Time.unscaledDeltaTime * slow.chargeSpeed), 0, slow.max);
 				slow.ui.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, Mathf.Lerp(0, 175, Mathf.InverseLerp(0, slow.max, slow.amount)));
 
 				if (start)
