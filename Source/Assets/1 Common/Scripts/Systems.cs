@@ -476,14 +476,14 @@ namespace GalaxyRush
             public void GetTargeted()
             {
                 Ray ray = new Ray(Global.player.cameraPosition.position, Global.player.cameraPosition.transform.TransformDirection(Vector3.forward));
-                if (Physics.Raycast(ray, out RaycastHit hit, 200, Global.player.shots.collidableLayers))
+                if (Physics.Raycast(ray, out RaycastHit hit, 125, Global.player.shots.collidableLayers))
                 {
                     targeted = hit.point;
                     Focus(Global.player.shots.targetLayers == (Global.player.shots.targetLayers | (1 << hit.collider.gameObject.layer)));
                 }
                 else
                 {
-                    targeted = ray.GetPoint(200);
+                    targeted = ray.GetPoint(125);
                     Focus(false);
                 }
             }
