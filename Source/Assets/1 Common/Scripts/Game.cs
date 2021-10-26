@@ -195,6 +195,9 @@ namespace GalaxyRush
 
         public void SetCheckpoint(int checkpoint)
         {
+            if (level == 2 && checkpoint == 3)
+                Global.player.shots.chargeTime = 0.5f;
+
             ActivateObstacles(this.checkpoint, false);
             ActivateStars(this.checkpoint, false);
 
