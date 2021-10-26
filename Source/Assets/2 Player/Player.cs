@@ -582,6 +582,9 @@ namespace GalaxyRush
 
 				movement.jumpPadTimer = 0;
 				Transition.Add((v) => movement.verticalVelocity = v, EaseFunctions.Linear, EaseDirections.InOut, 100, 0, 1);
+
+				movement.dash = true;
+				movement.doubleJump = true;
 			}
 		}
 		public void Death()
