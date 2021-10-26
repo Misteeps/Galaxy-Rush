@@ -175,7 +175,7 @@ namespace GalaxyRush
         public void ActivateStars(int checkpoint, bool active)
         {
             foreach (Star star in stars[checkpoint])
-                star.enabled = active;
+                star.transform.localScale = Vector3.one * star.scale;
         }
 
         public void ResetObstacles()
