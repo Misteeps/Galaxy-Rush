@@ -16711,6 +16711,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 570806834}
     - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
+      propertyPath: shots.chargeTime
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823702982601562740, guid: f73cff8c511a82c4e9ebbc82576a7822, type: 3}
       propertyPath: rightArm.animator
       value: 
       objectReference: {fileID: 570806836}

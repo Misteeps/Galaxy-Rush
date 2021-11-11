@@ -23,6 +23,8 @@ namespace GalaxyRush
         {
             Global.game.PlaySound("Star Break", transform.position);
 
+            GetComponent<Collider>().enabled = false;
+
             Transition.Add(gameObject, TransitionComponents.Scale, TransitionUnits.X, EaseFunctions.Bounce, EaseDirections.In, 1, 0, 0.3f, true);
             Transition.Add(gameObject, TransitionComponents.Scale, TransitionUnits.Y, EaseFunctions.Bounce, EaseDirections.In, 1, 0, 0.3f, true);
             Transition.Add(gameObject, TransitionComponents.Scale, TransitionUnits.Z, EaseFunctions.Bounce, EaseDirections.In, 1, 0, 0.3f, true);
