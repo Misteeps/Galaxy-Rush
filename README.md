@@ -1,4 +1,6 @@
 # Galaxy Rush
+<b>Play on itch.io :</b> https://misteeps.itch.io/galaxy-rush
+
 Run through vibrant levels in space.
 
 Shoot activators to clear obstacles and open paths.
